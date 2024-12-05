@@ -1,0 +1,14 @@
+C:\Users\david\Desktop\Visual Studio Projects\zdSharp\zdSharp\bin\Release\net8.0\zdSharp.exe
+C:\Users\david\Desktop\Visual Studio Projects\zdSharp\zdSharp\bin\Release\net8.0\zdSharp.deps.json
+C:\Users\david\Desktop\Visual Studio Projects\zdSharp\zdSharp\bin\Release\net8.0\zdSharp.runtimeconfig.json
+C:\Users\david\Desktop\Visual Studio Projects\zdSharp\zdSharp\bin\Release\net8.0\zdSharp.dll
+C:\Users\david\Desktop\Visual Studio Projects\zdSharp\zdSharp\bin\Release\net8.0\zdSharp.pdb
+C:\Users\david\Desktop\Visual Studio Projects\zdSharp\zdSharp\obj\Release\net8.0\zdSharp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\david\Desktop\Visual Studio Projects\zdSharp\zdSharp\obj\Release\net8.0\zdSharp.AssemblyInfoInputs.cache
+C:\Users\david\Desktop\Visual Studio Projects\zdSharp\zdSharp\obj\Release\net8.0\zdSharp.AssemblyInfo.cs
+C:\Users\david\Desktop\Visual Studio Projects\zdSharp\zdSharp\obj\Release\net8.0\zdSharp.csproj.CoreCompileInputs.cache
+C:\Users\david\Desktop\Visual Studio Projects\zdSharp\zdSharp\obj\Release\net8.0\zdSharp.dll
+C:\Users\david\Desktop\Visual Studio Projects\zdSharp\zdSharp\obj\Release\net8.0\refint\zdSharp.dll
+C:\Users\david\Desktop\Visual Studio Projects\zdSharp\zdSharp\obj\Release\net8.0\zdSharp.pdb
+C:\Users\david\Desktop\Visual Studio Projects\zdSharp\zdSharp\obj\Release\net8.0\zdSharp.genruntimeconfig.cache
+C:\Users\david\Desktop\Visual Studio Projects\zdSharp\zdSharp\obj\Release\net8.0\ref\zdSharp.dll
