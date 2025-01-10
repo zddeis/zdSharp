@@ -5,10 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace zdSharp
+namespace zds
 {
     class Commands
     {
+        private static string Extension = "zds";
+        private static string Docs = "docs.html";
+
         private static string help = "" +
                         "\n 1. Write program file path or open it with ZD#" +
                         "\n " +
@@ -26,16 +29,16 @@ namespace zdSharp
                         "\n " +
                         "";
 
-        public static bool VerifyExtension()
+        public static bool VerifyExtension(string FilePath)
         {
-            int Len_FP = Global.FilePath.Length;
-            int Len_EX = Global.Extension.Length;
+            int Len_FP = FilePath.Length;
+            int Len_EX = Extension.Length;
 
             for (int i = 0; i < Math.Min(Len_EX, Len_FP); i++)
             {
                 int j = Len_FP - Len_EX + i;
 
-                if (Global.FilePath[j] == Global.Extension[i]) { continue; }
+                if (FilePath[j] == Extension[i]) { continue; }
 
                 return false;
             }
@@ -47,7 +50,7 @@ namespace zdSharp
         {
             Console.Write("\n <ZD#> ");
 
-            string Command = Console.ReadLine();
+            string? Command = Console.ReadLine();
 
             switch (Command)
             {
@@ -73,13 +76,13 @@ namespace zdSharp
                     break;
 
                 case "docs":
-                    if (!File.Exists(Global.Docs))
+                    if (!File.Exists(Docs))
                     {
-                        Log.Error($"{Global.Docs} doesn't exist");
+                        //Log.Error($"{Docs} doesn't exist");
                         break;
                     }
 
-                    Process.Start(Global.Docs);
+                    Process.Start(Docs);
                     break;
 
                 default:
@@ -98,3 +101,4 @@ namespace zdSharp
         }
     }
 }
+

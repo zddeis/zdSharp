@@ -4,37 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace zdSharp
+namespace zds
 {
     class Log
     {
-        public static void WriteMessage(string message, ConsoleColor Color)
+        public static void Error(string message)
         {
-            ConsoleColor _ConsoleColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Error: " + message);
+        }
 
-            Console.ForegroundColor = Color;
+        public static void Warning(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Warning: " + message);
+        }
+
+        public static void Info(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("Info: " + message);
+        }
+
+        public static void Write(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(message);
-            Console.ForegroundColor = _ConsoleColor;
-        }
-
-        public static void Info(dynamic message) { WriteMessage($"INFO - {message.ToString()}", ConsoleColor.Cyan); }
-        public static void Warn(dynamic message) { WriteMessage($"WARN - {message.ToString()}", ConsoleColor.Yellow); }
-        public static void Error(dynamic message) { WriteMessage($"ERROR - {message.ToString()}", ConsoleColor.Red); }
-        public static void Custom(string type, dynamic message) { WriteMessage($"{type} - {message}", ConsoleColor.Green); }
-
-        public static void Error_Expected(string Expected, dynamic Value, int Line)
-        {
-            Global.Error = true;
-
-            Error($"{Expected} expected, instead has: '{Value.ToString()}' ; Line: {Line}.");
-        }
-
-        public static void Error_ExpectedAfter(string Expected, string After, int Line)
-        {
-            Global.Error = true;
-
-            Error($"{Expected} expected after '{After}'; Line: {Line}.");
         }
     }
 }
-

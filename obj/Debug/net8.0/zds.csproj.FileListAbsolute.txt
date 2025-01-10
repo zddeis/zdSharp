@@ -1,0 +1,14 @@
+C:\Users\david\Desktop\Visual Studio Projects\zds\zds\bin\Debug\net8.0\zds.exe
+C:\Users\david\Desktop\Visual Studio Projects\zds\zds\bin\Debug\net8.0\zds.deps.json
+C:\Users\david\Desktop\Visual Studio Projects\zds\zds\bin\Debug\net8.0\zds.runtimeconfig.json
+C:\Users\david\Desktop\Visual Studio Projects\zds\zds\bin\Debug\net8.0\zds.dll
+C:\Users\david\Desktop\Visual Studio Projects\zds\zds\bin\Debug\net8.0\zds.pdb
+C:\Users\david\Desktop\Visual Studio Projects\zds\zds\obj\Debug\net8.0\zds.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\david\Desktop\Visual Studio Projects\zds\zds\obj\Debug\net8.0\zds.AssemblyInfoInputs.cache
+C:\Users\david\Desktop\Visual Studio Projects\zds\zds\obj\Debug\net8.0\zds.AssemblyInfo.cs
+C:\Users\david\Desktop\Visual Studio Projects\zds\zds\obj\Debug\net8.0\zds.csproj.CoreCompileInputs.cache
+C:\Users\david\Desktop\Visual Studio Projects\zds\zds\obj\Debug\net8.0\zds.dll
+C:\Users\david\Desktop\Visual Studio Projects\zds\zds\obj\Debug\net8.0\refint\zds.dll
+C:\Users\david\Desktop\Visual Studio Projects\zds\zds\obj\Debug\net8.0\zds.pdb
+C:\Users\david\Desktop\Visual Studio Projects\zds\zds\obj\Debug\net8.0\zds.genruntimeconfig.cache
+C:\Users\david\Desktop\Visual Studio Projects\zds\zds\obj\Debug\net8.0\ref\zds.dll

@@ -1,125 +1,67 @@
-﻿
-using System;
-using System.Linq;
-using System.IO;
-using System.Collections.Generic;
-using System.Threading;
-
+﻿using System;
+using System.Diagnostics.Metrics;
 using System.Diagnostics;
-using System.Globalization;
-using System.Security.Permissions;
+using zds.Core;
+using zds.Core.Statements;
 
-/*
-
-C:\Users\david\Desktop\ZDSharp Projects\Program1.zds
-
-*/
-
-namespace zdSharp
+namespace zds
 {
-    static class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
-            Global.FilePath = args.Length == 0 ? "" : args[0];
+            string FilePath = args.Length > 0 ? args[0] : "";
 
             Console.Title = "ZD#";
-            Console.WriteLine(" Type 'help' or 'credits'");
+            Log.Write(" Type 'help' or 'credits'");
+
 
             // Read File Lines
-            while (Global.FilePath == "")
+            while (FilePath == "")
             {
-                Global.FilePath = Commands.Run();
-                Global.FilePath = File.Exists(Global.FilePath) ? Global.FilePath : "";
-                Global.FilePath = Commands.VerifyExtension() ? Global.FilePath : "";
+                FilePath = Commands.Run();
+                FilePath = File.Exists(FilePath) ? FilePath : "";
+                FilePath = Commands.VerifyExtension(FilePath) ? FilePath : "";
             }
 
             Console.Clear();
-            Console.Title = Global.FileName();
-            Global.FileLines = File.ReadLines(Global.FilePath).ToArray();
+            Console.Title = FileName(FilePath);
 
 
-            // Lexer
-
-
-            List<Token> tokens = new List<Token>();
-
+            // Run Program
+            
             try
             {
-                for (int i = 0; i < Global.FileLines.Length; i++)
-                {
-                    Global.CurrentLine = i + 1;
-                    List<Token> TokenLine = new Lexer(Global.FileLines[i]).Tokenize();
+                Core.Environment _globals = new Core.Environment();
+                string source = File.ReadAllText(FilePath);
 
-                    for (int j = 0; j < TokenLine.Count; j++)
-                    {
-                        tokens.Add(TokenLine[j]);
-                    }
-                }
+                var tokenizer = new Tokenizer(source);
+                var tokens = tokenizer.Tokenize();
 
-                if (Debug.Lexer)
-                {
-                    Log.Custom("DEBUG", "TOKENS:");
+                var parser = new Parser(tokens, _globals);
+                var statements = parser.Parse();
 
-                    foreach (var token in tokens)
-                        Console.WriteLine($"  {token.Type} : {token.Value}");
-
-                    Console.WriteLine();
-                    Console.ReadKey(true);
-                }
+                var interpreter = new Interpreter(_globals);
+                interpreter.Run(statements);
             }
             catch (Exception ex)
             {
-                Log.Error($"Lexer: {ex.Message} \n");
-                Console.ReadKey(true);
-                return;
+                Log.Error(ex.Message);
+                Console.ReadKey();
             }
+        }
 
+        static string FileName(string FilePath)
+        {
+            string FileName = "";
 
-            // Parser
-
-
-            var parser = new Parser(tokens);
-            ASTNode ast = parser.Parse();
-
-            try
+            for (int i = FilePath.Length - 1; i >= 0; i--)
             {
-                if (Debug.Parser)
-                {
-                    Log.Custom("DEBUG", "AST:");
-                    Console.WriteLine(ast + "\n");
-                    Console.ReadKey(true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Parser: {ex.Message} \n");
-                Console.ReadKey(true);
-                return;
+                if (FilePath[i] == '\\') { return FileName; }
+                FileName = FilePath[i] + FileName;
             }
 
-
-            // Interpreter
-
-
-            var interpreter = new Interpreter();
-
-            try
-            {
-                if (Debug.Intepreter)
-                {
-                    Log.Custom("DEBUG", "OUTPUT:");
-                }
-
-                interpreter.Interpret(ast);
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Runtime: {ex.Message}");
-                Console.ReadKey(true);
-                return;
-            }
+            return FileName;
         }
     }
 }
-

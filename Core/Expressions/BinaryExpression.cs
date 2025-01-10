@@ -1,0 +1,90 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace zds.Core.Expressions
+{
+    public class BinaryExpression : IExpression
+    {
+        public IExpression _left { get; }
+        public Token _operator { get; }
+        public IExpression _right { get; }
+
+        public BinaryExpression(IExpression left, Token op, IExpression right)
+        {
+            _left = left;
+            _operator = op;
+            _right = right;
+        }
+
+        public object? Evaluate()
+        {
+            var left = _left.Evaluate();
+            var right = _right.Evaluate();
+
+            return _operator.Type switch
+            {
+                TokenType.Plus => Add(left, right),
+                TokenType.Minus => Subtract(left, right),
+                TokenType.Multiply => Multiply(left, right),
+                TokenType.Divide => Divide(left, right),
+                TokenType.EqualsEquals => Equals(left, right),
+                TokenType.Or => Or(left, right),
+                TokenType.And => And(left, right),
+                _ => throw new Exception($"Unknown operator {_operator.Type}")
+            };
+        }
+
+        private static object Add(object? left, object? right)
+        {
+            if (left is double l && right is double r) return l + r;
+            if (left is string || right is string) return $"{left}{right}";
+            throw new Exception("Invalid operands for addition");
+        }
+
+        private static object Subtract(object? left, object? right)
+        {
+            if (left is double l && right is double r) return l - r;
+            throw new Exception("Invalid operands for subtraction");
+        }
+
+        private static object Multiply(object? left, object? right)
+        {
+            if (left is double l && right is double r) return l * r;
+            throw new Exception("Invalid operands for multiplication");
+        }
+
+        private static object Divide(object? left, object? right)
+        {
+            if (left is double l && right is double r)
+            {
+                if (r == 0) return 0;
+                return l / r;
+            }
+            throw new Exception("Invalid operands for division");
+        }
+
+        private static new bool Equals(object? left, object? right)
+        {
+            if (left == null && right == null) return true;
+            if (left == null || right == null) return false;
+            return left.Equals(right);
+        }
+
+        private static bool Or(object? left, object? right)
+        {
+            if (left == null && right == null) return false;
+            if (left is bool l && right is bool r) return l || r;
+            return true;
+        }
+
+        private static bool And(object? left, object? right)
+        {
+            if (left == null || right == null) return false;
+            if (left is bool l && right is bool r) return l && r;
+            return true;
+        }
+    }
+}

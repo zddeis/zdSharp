@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\zdSharp\\zdSharp\\zdSharp.csproj",
-      "projectName": "zdSharp",
-      "projectPath": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\zdSharp\\zdSharp\\zdSharp.csproj",
+      "projectUniqueName": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\zds\\zds\\zds.csproj",
+      "projectName": "zds",
+      "projectPath": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\zds\\zds\\zds.csproj",
       "packagesPath": "C:\\Users\\david\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\zdSharp\\zdSharp\\obj\\",
+      "outputPath": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\zds\\zds\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
