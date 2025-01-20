@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -111,11 +111,11 @@ namespace zds.Core
             {
                 var name = Previous().Value.ToString()!;
 
-                // Handle assignment
+                // assignment
                 if (Match(TokenType.Equals))
                     return new AssignmentExpression(name, Expression());
 
-                // Handle function call
+                // function call
                 if (Match(TokenType.LeftParen))
                 {
                     var arguments = new List<IExpression>();
@@ -130,9 +130,8 @@ namespace zds.Core
                     return new CallExpression(name, arguments);
                 }
 
-                // Just a variable reference
-                //return new VariableExpression(name, _environment);
-                return Primary();
+                return new VariableExpression(name, _environment);
+                //return Primary();
             }
 
             return Equality();
