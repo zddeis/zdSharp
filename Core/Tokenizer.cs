@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -65,7 +65,7 @@ namespace zds.Core
                     continue;
                 }
 
-                if (c == '-' && Peek(1) == '-')
+                if (c == '/' && Peek(1) == '/')
                 {
                     while (_position < _input.Length && Peek() != '\n')
                         _position++;
@@ -153,17 +153,7 @@ namespace zds.Core
                 case '/': _tokens.Add(new Token(TokenType.Divide, "/", _line)); break;
                 case '|': _tokens.Add(new Token(TokenType.Or, "|", _line)); break;
                 case '&': _tokens.Add(new Token(TokenType.And, "&", _line)); break;
-                case '=':
-                    if (_position < _input.Length && _input[_position] == '=')
-                    {
-                        _position++;
-                        _tokens.Add(new Token(TokenType.EqualsEquals, "==", _line));
-                    }
-                    else
-                    {
-                        _tokens.Add(new Token(TokenType.Equals, "=", _line));
-                    }
-                    break;
+                case '=': _tokens.Add(new Token(TokenType.Equals, "=", _line)); break;
                 case '(': _tokens.Add(new Token(TokenType.LeftParen, "(", _line)); break;
                 case ')': _tokens.Add(new Token(TokenType.RightParen, ")", _line)); break;
                 case '[': _tokens.Add(new Token(TokenType.LeftBracket, "[", _line)); break;
