@@ -76,12 +76,6 @@ namespace zds.Core
             return new ReturnStatement(value);
         }
 
-        private ExpressionStatement ExpressionStatement()
-        {
-            var expr = Expression();
-            return new ExpressionStatement(expr);
-        }
-
         private List<IStatement> Block()
         {
             var statements = new List<IStatement>();
@@ -108,7 +102,7 @@ namespace zds.Core
             if (Match(TokenType.If)) return IfStatement();
             if (Match(TokenType.Return)) return ReturnStatement();
 
-            return ExpressionStatement();
+            return new ExpressionStatement(Expression());
         }
 
         private IExpression Expression()
@@ -137,7 +131,8 @@ namespace zds.Core
                 }
 
                 // Just a variable reference
-                return new VariableExpression(name, _environment);
+                //return new VariableExpression(name, _environment);
+                return Primary();
             }
 
             return Equality();
