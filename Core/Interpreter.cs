@@ -57,11 +57,16 @@ namespace zds.Core
                 return Math.Abs(Convert.ToDecimal(args[0]));
             }));
 
+            _globals.Define("clear", new NativeFunction((args) =>
+            {
+                Console.Clear();
+                return null;
+            }));
+
             _globals.Define("print", new NativeFunction((args) =>
             {
-                // Joins every string from args with White-Space separating
                 string result = string.Join(" ", args.Select(arg => arg?.ToString()));
-
+                
                 Console.WriteLine(result);
                 return result;
             }));

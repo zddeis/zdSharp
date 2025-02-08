@@ -18,11 +18,10 @@ namespace zds.Core
         private static readonly Dictionary<string, TokenType> Keywords = new()
         {
             ["function"] = TokenType.Function,
-            ["while"] = TokenType.While,
             ["end"] = TokenType.End,
-            ["do"] = TokenType.Do,
-            ["if"] = TokenType.If,
             ["then"] = TokenType.Then,
+            ["while"] = TokenType.While,
+            ["if"] = TokenType.If,
             ["else"] = TokenType.Else,
             ["return"] = TokenType.Return,
             ["true"] = TokenType.Boolean,
@@ -65,7 +64,7 @@ namespace zds.Core
                     continue;
                 }
 
-                if (c == '-' && Peek(1) == '-')
+                if (c == '/' && Peek(1) == '/')
                 {
                     while (_position < _input.Length && Peek() != '\n')
                         _position++;
@@ -76,6 +75,7 @@ namespace zds.Core
             }
 
             _tokens.Add(new Token(TokenType.EOF, "", _line));
+
             return _tokens;
         }
 
@@ -153,17 +153,7 @@ namespace zds.Core
                 case '/': _tokens.Add(new Token(TokenType.Divide, "/", _line)); break;
                 case '|': _tokens.Add(new Token(TokenType.Or, "|", _line)); break;
                 case '&': _tokens.Add(new Token(TokenType.And, "&", _line)); break;
-                case '=':
-                    if (_position < _input.Length && _input[_position] == '=')
-                    {
-                        _position++;
-                        _tokens.Add(new Token(TokenType.EqualsEquals, "==", _line));
-                    }
-                    else
-                    {
-                        _tokens.Add(new Token(TokenType.Equals, "=", _line));
-                    }
-                    break;
+                case '=': _tokens.Add(new Token(TokenType.Equals, "=", _line)); break;
                 case '(': _tokens.Add(new Token(TokenType.LeftParen, "(", _line)); break;
                 case ')': _tokens.Add(new Token(TokenType.RightParen, ")", _line)); break;
                 case '[': _tokens.Add(new Token(TokenType.LeftBracket, "[", _line)); break;

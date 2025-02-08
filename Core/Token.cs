@@ -31,7 +31,6 @@ namespace zds.Core
         Function,
         While,
         End,
-        Do,
         If,
         Then,
         Else,
@@ -61,6 +60,7 @@ namespace zds.Core
         RightBracket,
         Comma,
 
+        // End of File
         EOF
     }
 }

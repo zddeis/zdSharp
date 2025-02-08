@@ -46,7 +46,7 @@ namespace zds.Core
         private WhileStatement WhileStatement()
         {
             var condition = Expression();
-            Consume(TokenType.Do, "Expected 'do' after while condition");
+            Consume(TokenType.Then, "Expected 'then' after while condition");
             var body = Block();
 
             return new WhileStatement(condition, body);
@@ -79,16 +79,21 @@ namespace zds.Core
         private List<IStatement> Block()
         {
             var statements = new List<IStatement>();
+            
             while (!Check(TokenType.End) && !Check(TokenType.Else) && !IsAtEnd())
                 statements.Add(Statement());
 
-            Consume(TokenType.End, "Expected 'end' after block");
+            if (!Check(TokenType.Else)) {
+                Consume(TokenType.End, "Expected 'end' after block");
+            }
+
             return statements;
         }
 
         public List<IStatement> Parse()
         {
             var statements = new List<IStatement>();
+            
             while (!IsAtEnd())
                 statements.Add(Statement());
 
@@ -111,11 +116,11 @@ namespace zds.Core
             {
                 var name = Previous().Value.ToString()!;
 
-                // Handle assignment
+                // assignment
                 if (Match(TokenType.Equals))
                     return new AssignmentExpression(name, Expression());
 
-                // Handle function call
+                // function call
                 if (Match(TokenType.LeftParen))
                 {
                     var arguments = new List<IExpression>();
@@ -130,9 +135,8 @@ namespace zds.Core
                     return new CallExpression(name, arguments);
                 }
 
-                // Just a variable reference
-                //return new VariableExpression(name, _environment);
-                return Primary();
+                return new VariableExpression(name, _environment);
+                //return Primary();
             }
 
             return Equality();
@@ -250,6 +254,8 @@ namespace zds.Core
                     } while (Match(TokenType.Comma));
                 }
                 Consume(TokenType.RightBracket, "Expected ']' after array elements");
+       
+                
                 return new ArrayExpression(elements);
             }
 
