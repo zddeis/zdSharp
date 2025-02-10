@@ -8,9 +8,9 @@ namespace zds.Core.Expressions
 {
     public class BinaryExpression : IExpression
     {
-        public IExpression _left { get; }
-        public Token _operator { get; }
-        public IExpression _right { get; }
+        private readonly IExpression _left;
+        private readonly Token _operator;
+        private readonly IExpression _right;
 
         public BinaryExpression(IExpression left, Token op, IExpression right)
         {
@@ -31,8 +31,13 @@ namespace zds.Core.Expressions
                 TokenType.Multiply => Multiply(left, right),
                 TokenType.Divide => Divide(left, right),
                 TokenType.EqualsEquals => Equals(left, right),
+                TokenType.NotEquals => NotEquals(left, right),
                 TokenType.Or => Or(left, right),
                 TokenType.And => And(left, right),
+                TokenType.Greater => Greater(left, right),
+                TokenType.Less => Less(left, right),
+                TokenType.GreaterEquals => GreaterEquals(left, right),
+                TokenType.LessEquals => LessEquals(left, right),
                 _ => throw new Exception($"Unknown operator {_operator.Type}")
             };
         }
@@ -73,18 +78,51 @@ namespace zds.Core.Expressions
             return left.Equals(right);
         }
 
+        private static bool NotEquals(object? left, object? right)
+        {
+            return !Equals(left, right);
+        }
+
         private static bool Or(object? left, object? right)
         {
-            if (left == null && right == null) return false;
-            if (left is bool l && right is bool r) return l || r;
-            return true;
+            if (left is bool l && right is bool r)
+                return l || r;
+            throw new Exception("Operands must be boolean values");
         }
 
         private static bool And(object? left, object? right)
         {
-            if (left == null || right == null) return false;
-            if (left is bool l && right is bool r) return l && r;
-            return true;
+            if (left is bool l && right is bool r)
+                return l && r;
+            throw new Exception("Operands must be boolean values");
+        }
+
+        private static bool Greater(object? left, object? right)
+        {
+            if (left is double l && right is double r)
+                return l > r;
+            throw new Exception("Operands must be numbers");
+        }
+
+        private static bool Less(object? left, object? right)
+        {
+            if (left is double l && right is double r)
+                return l < r;
+            throw new Exception("Operands must be numbers");
+        }
+
+        private static bool GreaterEquals(object? left, object? right)
+        {
+            if (left is double l && right is double r)
+                return l >= r;
+            throw new Exception("Operands must be numbers");
+        }
+
+        private static bool LessEquals(object? left, object? right)
+        {
+            if (left is double l && right is double r)
+                return l <= r;
+            throw new Exception("Operands must be numbers");
         }
     }
 }

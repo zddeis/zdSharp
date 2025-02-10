@@ -129,7 +129,7 @@ namespace zds.Core
                         case 'n': str += "\n"; break;
                         case 't': str += "\t"; break;
                         case 'r': str += "\r"; break;
-                        default : str += Peek(); _position--; break;
+                        default: str += Peek(); _position--; break;
                     }
                     _position++;
                     continue;
@@ -153,7 +153,50 @@ namespace zds.Core
                 case '/': _tokens.Add(new Token(TokenType.Divide, "/", _line)); break;
                 case '|': _tokens.Add(new Token(TokenType.Or, "|", _line)); break;
                 case '&': _tokens.Add(new Token(TokenType.And, "&", _line)); break;
-                case '=': _tokens.Add(new Token(TokenType.Equals, "=", _line)); break;
+                case '=':
+                    if (Peek() == '=')
+                    {
+                        _position++;
+                        _tokens.Add(new Token(TokenType.EqualsEquals, "==", _line));
+                    }
+                    else
+                    {
+                        _tokens.Add(new Token(TokenType.Equals, "=", _line));
+                    }
+                    break;
+                case '!':
+                    if (Peek() == '=')
+                    {
+                        _position++;
+                        _tokens.Add(new Token(TokenType.NotEquals, "!=", _line));
+                    }
+                    else
+                    {
+                        throw new Exception($"Expected '=' after '!' at line {_line}");
+                    }
+                    break;
+                case '>':
+                    if (Peek() == '=')
+                    {
+                        _position++;
+                        _tokens.Add(new Token(TokenType.GreaterEquals, ">=", _line));
+                    }
+                    else
+                    {
+                        _tokens.Add(new Token(TokenType.Greater, ">", _line));
+                    }
+                    break;
+                case '<':
+                    if (Peek() == '=')
+                    {
+                        _position++;
+                        _tokens.Add(new Token(TokenType.LessEquals, "<=", _line));
+                    }
+                    else
+                    {
+                        _tokens.Add(new Token(TokenType.Less, "<", _line));
+                    }
+                    break;
                 case '(': _tokens.Add(new Token(TokenType.LeftParen, "(", _line)); break;
                 case ')': _tokens.Add(new Token(TokenType.RightParen, ")", _line)); break;
                 case '[': _tokens.Add(new Token(TokenType.LeftBracket, "[", _line)); break;

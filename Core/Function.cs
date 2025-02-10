@@ -22,6 +22,13 @@ namespace zds.Core
         {
             var environment = new Environment(_closure);
 
+            // Validate argument count
+            if (arguments.Count != _declaration.Parameters.Count)
+            {
+                throw new Exception($"Expected {_declaration.Parameters.Count} arguments but got {arguments.Count}");
+            }
+
+            // Define parameters in the function's environment
             for (int i = 0; i < _declaration.Parameters.Count; i++)
             {
                 environment.Define(_declaration.Parameters[i], arguments[i]);
@@ -29,14 +36,12 @@ namespace zds.Core
 
             try
             {
-                interpreter.ExecuteBlock(_declaration.Body, environment);
+                return interpreter.ExecuteBlock(_declaration.Body, environment);
             }
             catch (ReturnException returnValue)
             {
                 return returnValue.Value;
             }
-
-            return null;
         }
     }
 

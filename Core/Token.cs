@@ -48,10 +48,14 @@ namespace zds.Core
         Multiply,
         Divide,
         Equals,
-
         EqualsEquals,
+        NotEquals,
         Or,
         And,
+        Greater,
+        Less,
+        GreaterEquals,
+        LessEquals,
 
         // Delimiters
         LeftParen,

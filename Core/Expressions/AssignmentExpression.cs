@@ -10,16 +10,20 @@ namespace zds.Core.Expressions
     {
         public string _name;
         public IExpression _value;
+        public Environment _environment;
 
-        public AssignmentExpression(string name, IExpression value)
+        public AssignmentExpression(string name, IExpression value, Environment environment)
         {
             _name = name;
             _value = value;
+            _environment = environment;
         }
 
         public object? Evaluate()
         {
-            throw new NotImplementedException();
+            var value = _value.Evaluate();
+            _environment.Assign(_name, value);
+            return value;
         }
     }
 }

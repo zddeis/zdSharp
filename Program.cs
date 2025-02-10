@@ -9,14 +9,14 @@ namespace zds
     internal class Program
     {
         public static bool Debug = false;
+        public static string Version = "v0.1";
 
         static void Main(string[] args)
         {
             string FilePath = args.Length > 0 ? args[0] : "";
 
-            Console.Title = "ZD#";
+            Console.Title = "ZD#" + " - " + Version;
             Log.Write(" Type 'help' or 'credits'");
-
 
             // Read File Lines
 
@@ -29,7 +29,6 @@ namespace zds
 
             Console.Clear();
             Console.Title = FileName(FilePath);
-
 
             // Run Program
             

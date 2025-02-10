@@ -79,11 +79,12 @@ namespace zds.Core
         private List<IStatement> Block()
         {
             var statements = new List<IStatement>();
-            
+
             while (!Check(TokenType.End) && !Check(TokenType.Else) && !IsAtEnd())
                 statements.Add(Statement());
 
-            if (!Check(TokenType.Else)) {
+            if (!Check(TokenType.Else))
+            {
                 Consume(TokenType.End, "Expected 'end' after block");
             }
 
@@ -93,7 +94,7 @@ namespace zds.Core
         public List<IStatement> Parse()
         {
             var statements = new List<IStatement>();
-            
+
             while (!IsAtEnd())
                 statements.Add(Statement());
 
@@ -112,49 +113,64 @@ namespace zds.Core
 
         private IExpression Expression()
         {
-            if (Match(TokenType.Identifier))
-            {
-                var name = Previous().Value.ToString()!;
-
-                // assignment
-                if (Match(TokenType.Equals))
-                    return new AssignmentExpression(name, Expression());
-
-                // function call
-                if (Match(TokenType.LeftParen))
-                {
-                    var arguments = new List<IExpression>();
-                    if (!Check(TokenType.RightParen))
-                    {
-                        do
-                        {
-                            arguments.Add(Expression());
-                        } while (Match(TokenType.Comma));
-                    }
-                    Consume(TokenType.RightParen, "Expected ')' after arguments");
-                    return new CallExpression(name, arguments);
-                }
-
-                return new VariableExpression(name, _environment);
-                //return Primary();
-            }
-
-            return Equality();
+            return Assignment();
         }
 
         private IExpression Assignment()
         {
+            if (Match(TokenType.Identifier))
+            {
+                var name = Previous().Value.ToString()!;
+
+                if (Match(TokenType.Equals))
+                {
+                    var value = Expression();
+                    return new AssignmentExpression(name, value, _environment);
+                }
+
+                _current--; // Go back to the identifier token
+            }
+
+            return LogicalOr();
+        }
+
+        private IExpression ParseOperators(IExpression left)
+        {
+            while (Match(TokenType.Or) || Match(TokenType.And) ||
+                   Match(TokenType.Greater) || Match(TokenType.Less) ||
+                   Match(TokenType.GreaterEquals) || Match(TokenType.LessEquals) ||
+                   Match(TokenType.EqualsEquals) || Match(TokenType.NotEquals))
+            {
+                var op = Previous();
+                var right = LogicalOr();
+                left = new Expressions.BinaryExpression(left, op, right);
+            }
+            return left;
+        }
+
+        private IExpression LogicalOr()
+        {
+            var expr = LogicalAnd();
+
+            while (Match(TokenType.Or))
+            {
+                var op = Previous();
+                var right = LogicalAnd();
+                expr = new Expressions.BinaryExpression(expr, op, right);
+            }
+
+            return expr;
+        }
+
+        private IExpression LogicalAnd()
+        {
             var expr = Equality();
 
-            if (Match(TokenType.Equals))
+            while (Match(TokenType.And))
             {
-                var equals = Previous();
-                var value = Assignment();
-
-                if (expr is VariableExpression varExpr)
-                    return new AssignmentExpression(varExpr._name, value);
-
-                throw new Exception($"Invalid assignment target at line {equals.Line}");
+                var op = Previous();
+                var right = Equality();
+                expr = new Expressions.BinaryExpression(expr, op, right);
             }
 
             return expr;
@@ -162,9 +178,24 @@ namespace zds.Core
 
         private IExpression Equality()
         {
+            var expr = Comparison();
+
+            while (Match(TokenType.EqualsEquals) || Match(TokenType.NotEquals))
+            {
+                var op = Previous();
+                var right = Comparison();
+                expr = new Expressions.BinaryExpression(expr, op, right);
+            }
+
+            return expr;
+        }
+
+        private IExpression Comparison()
+        {
             var expr = Term();
 
-            while (Match(TokenType.EqualsEquals))
+            while (Match(TokenType.Greater) || Match(TokenType.Less) ||
+                   Match(TokenType.GreaterEquals) || Match(TokenType.LessEquals))
             {
                 var op = Previous();
                 var right = Term();
@@ -190,23 +221,9 @@ namespace zds.Core
 
         private IExpression Factor()
         {
-            var expr = Comparison();
-
-            while (Match(TokenType.Multiply) || Match(TokenType.Divide))
-            {
-                var op = Previous();
-                var right = Comparison();
-                expr = new Expressions.BinaryExpression(expr, op, right);
-            }
-
-            return expr;
-        }
-
-        private IExpression Comparison()
-        {
             var expr = Primary();
 
-            while(Match(TokenType.Or) || Match(TokenType.And))
+            while (Match(TokenType.Multiply) || Match(TokenType.Divide))
             {
                 var op = Previous();
                 var right = Primary();
@@ -254,8 +271,6 @@ namespace zds.Core
                     } while (Match(TokenType.Comma));
                 }
                 Consume(TokenType.RightBracket, "Expected ']' after array elements");
-       
-                
                 return new ArrayExpression(elements);
             }
 

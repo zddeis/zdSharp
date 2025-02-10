@@ -5,6 +5,6 @@
     "\\Core\\Expressions",
     "\\Core\\Statements"
   ],
-  "SelectedNode": "\\Program.cs",
+  "SelectedNode": "\\Core\\Interpreter.cs",
   "PreviewInSolutionExplorer": false
 }

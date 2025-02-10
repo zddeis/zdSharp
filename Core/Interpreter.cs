@@ -30,10 +30,17 @@ namespace zds.Core
 
                 result = key.Key switch
                 {
-                    ConsoleKey.D1 => "1", ConsoleKey.D2 => "2", ConsoleKey.D3 => "3",
-                    ConsoleKey.D4 => "4", ConsoleKey.D5 => "5", ConsoleKey.D6 => "6",
-                    ConsoleKey.D7 => "7", ConsoleKey.D8 => "8", ConsoleKey.D9 => "9",
-                    ConsoleKey.D0 => "0", _ => key.Key.ToString()
+                    ConsoleKey.D1 => "1",
+                    ConsoleKey.D2 => "2",
+                    ConsoleKey.D3 => "3",
+                    ConsoleKey.D4 => "4",
+                    ConsoleKey.D5 => "5",
+                    ConsoleKey.D6 => "6",
+                    ConsoleKey.D7 => "7",
+                    ConsoleKey.D8 => "8",
+                    ConsoleKey.D9 => "9",
+                    ConsoleKey.D0 => "0",
+                    _ => key.Key.ToString()
                 };
 
                 return result;
@@ -66,7 +73,7 @@ namespace zds.Core
             _globals.Define("print", new NativeFunction((args) =>
             {
                 string result = string.Join(" ", args.Select(arg => arg?.ToString()));
-                
+
                 Console.WriteLine(result);
                 return result;
             }));
@@ -83,14 +90,31 @@ namespace zds.Core
                 ExecuteStatement(statement);
         }
 
-        public void ExecuteBlock(List<IStatement> statements, Environment environment)
+        public object? ExecuteBlock(List<IStatement> statements, Environment environment)
         {
             var previous = _environment;
+            object? lastValue = null;
 
             try
             {
                 _environment = environment;
-                Execute(statements);
+                foreach (var statement in statements)
+                {
+                    if (statement is ReturnStatement ret)
+                    {
+                        object? value = ret.Value != null ? EvaluateExpression(ret.Value) : null;
+                        throw new ReturnException(value);
+                    }
+                    else if (statement is ExpressionStatement expr)
+                    {
+                        lastValue = EvaluateExpression(expr.Expression);
+                    }
+                    else
+                    {
+                        ExecuteStatement(statement);
+                    }
+                }
+                return lastValue;
             }
             finally
             {
