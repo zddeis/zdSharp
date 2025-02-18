@@ -40,16 +40,6 @@ namespace zds
                 var tokenizer = new Tokenizer(source);
                 var tokens = tokenizer.Tokenize();
 
-                if(Debug)
-                {
-                    foreach(var token in tokens)
-                    {
-                        Log.Custom(token.Line.ToString(), token.Type.ToString() + " - " + token.Value.ToString());
-                    }
-
-                    Console.ReadKey();
-                    Console.Clear();
-                }
 
                 var parser = new Parser(tokens, _globals);
                 var statements = parser.Parse();

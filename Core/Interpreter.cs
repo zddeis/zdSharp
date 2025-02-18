@@ -19,7 +19,7 @@ namespace zds.Core
 
             // Native Vars
 
-            _globals.Assign("pi", Math.PI);
+            _globals.Define("pi", Math.PI);
 
             // Native Functions
 
@@ -70,6 +70,13 @@ namespace zds.Core
                 return null;
             }));
 
+
+            _globals.Define("epoch", new NativeFunction((args) =>
+            {
+                TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+                return (double)t.TotalSeconds;
+            }));
+
             _globals.Define("print", new NativeFunction((args) =>
             {
                 string result = string.Join(" ", args.Select(arg => arg?.ToString()));
@@ -98,6 +105,7 @@ namespace zds.Core
             try
             {
                 _environment = environment;
+                
                 foreach (var statement in statements)
                 {
                     if (statement is ReturnStatement ret)
@@ -164,6 +172,7 @@ namespace zds.Core
             if (callee is Function function)
             {
                 var arguments = call._arguments.Select(arg => EvaluateExpression(arg)).ToList();
+
                 return function.Call(this, arguments);
             }
 
@@ -187,7 +196,7 @@ namespace zds.Core
         private object? EvaluateAssignment(AssignmentExpression assign)
         {
             var value = EvaluateExpression(assign._value);
-            _environment.Assign(assign._name, value);
+            _environment.Define(assign._name, value);
             return value;
         }
 

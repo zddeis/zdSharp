@@ -22,7 +22,7 @@ namespace zds.Core.Expressions
         public object? Evaluate()
         {
             var value = _value.Evaluate();
-            _environment.Assign(_name, value);
+            _environment.Define(_name, value);
             return value;
         }
     }

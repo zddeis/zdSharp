@@ -7,16 +7,32 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Core\\Interpreter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Statements\\ExpressionStatement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Core\\Statements\\ExpressionStatement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Parser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Core\\Parser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Statements\\FunctionStatement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Core\\Statements\\FunctionStatement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Token.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Core\\Token.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Expressions\\AssignmentExpression.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Core\\Expressions\\AssignmentExpression.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Expressions\\BinaryExpression.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Core\\Expressions\\BinaryExpression.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Function.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Core\\Function.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Environment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Core\\Environment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,41 +58,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Interpreter.cs",
-              "DocumentMoniker": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Interpreter.cs",
-              "RelativeDocumentMoniker": "Core\\Interpreter.cs",
-              "ToolTip": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Interpreter.cs",
-              "RelativeToolTip": "Core\\Interpreter.cs",
-              "ViewState": "AQIAAHsAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-10T10:30:37.767Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ExpressionStatement.cs",
-              "DocumentMoniker": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Statements\\ExpressionStatement.cs",
-              "RelativeDocumentMoniker": "Core\\Statements\\ExpressionStatement.cs",
-              "ToolTip": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Statements\\ExpressionStatement.cs",
-              "RelativeToolTip": "Core\\Statements\\ExpressionStatement.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-10T10:30:31.14Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "FunctionStatement.cs",
-              "DocumentMoniker": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Statements\\FunctionStatement.cs",
-              "RelativeDocumentMoniker": "Core\\Statements\\FunctionStatement.cs",
-              "ToolTip": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Statements\\FunctionStatement.cs",
-              "RelativeToolTip": "Core\\Statements\\FunctionStatement.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Title": "Token.cs",
+              "DocumentMoniker": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Token.cs",
+              "RelativeDocumentMoniker": "Core\\Token.cs",
+              "ToolTip": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Token.cs",
+              "RelativeToolTip": "Core\\Token.cs",
+              "ViewState": "AQIAACEAAAAAAAAAAAAAADIAAAAPAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-10T10:30:29.799Z",
+              "WhenOpened": "2025-02-14T12:03:52.343Z",
               "EditorCaption": ""
             },
             {
@@ -87,9 +77,83 @@
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAACEAAAAAAAAAAAAAADgAAAAQAAAA",
+              "ViewState": "AQIAAB4AAAAAAAAAAAAAACgAAAAqAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-10T10:29:15.158Z",
+              "WhenOpened": "2025-02-12T11:14:39.365Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "BinaryExpression.cs",
+              "DocumentMoniker": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Expressions\\BinaryExpression.cs",
+              "RelativeDocumentMoniker": "Core\\Expressions\\BinaryExpression.cs",
+              "ToolTip": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Expressions\\BinaryExpression.cs",
+              "RelativeToolTip": "Core\\Expressions\\BinaryExpression.cs",
+              "ViewState": "AQIAACcAAAAAAAAAAAAAAEIAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-12T13:11:42.912Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AssignmentExpression.cs",
+              "DocumentMoniker": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Expressions\\AssignmentExpression.cs",
+              "RelativeDocumentMoniker": "Core\\Expressions\\AssignmentExpression.cs",
+              "ToolTip": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Expressions\\AssignmentExpression.cs",
+              "RelativeToolTip": "Core\\Expressions\\AssignmentExpression.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-12T12:08:53.206Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Environment.cs",
+              "DocumentMoniker": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Environment.cs",
+              "RelativeDocumentMoniker": "Core\\Environment.cs",
+              "ToolTip": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Environment.cs",
+              "RelativeToolTip": "Core\\Environment.cs",
+              "ViewState": "AQIAAAcAAAAAAAAAAAAQwBoAAAA9AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T10:58:40.691Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Function.cs",
+              "DocumentMoniker": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Function.cs",
+              "RelativeDocumentMoniker": "Core\\Function.cs",
+              "ToolTip": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Function.cs",
+              "RelativeToolTip": "Core\\Function.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAACYAAABDAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T10:52:44.57Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Interpreter.cs",
+              "DocumentMoniker": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Interpreter.cs",
+              "RelativeDocumentMoniker": "Core\\Interpreter.cs",
+              "ToolTip": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Interpreter.cs",
+              "RelativeToolTip": "Core\\Interpreter.cs",
+              "ViewState": "AQIAAEEAAAAAAAAAAAAAwEoAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T10:50:28.522Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Parser.cs",
+              "DocumentMoniker": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Parser.cs",
+              "RelativeDocumentMoniker": "Core\\Parser.cs",
+              "ToolTip": "C:\\Users\\david\\Desktop\\Visual Studio Projects\\GitHub\\zdSharp\\Core\\Parser.cs",
+              "RelativeToolTip": "Core\\Parser.cs",
+              "ViewState": "AQIAAE4AAAAAAAAAAAAAAF0AAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T12:45:13.719Z",
               "EditorCaption": ""
             }
           ]

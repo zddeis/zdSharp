@@ -8,17 +8,12 @@ namespace zds.Core
 {
     public class Environment
     {
-        private readonly Dictionary<string, object?> _values = new();
+        public readonly Dictionary<string, object?> _values = new();
         private readonly Environment? _enclosing;
 
         public Environment(Environment? enclosing = null)
         {
             _enclosing = enclosing;
-        }
-
-        public void Define(string name, object? value)
-        {
-            _values[name] = value;
         }
 
         public object? Get(string name)
@@ -32,7 +27,7 @@ namespace zds.Core
             throw new Exception($"Undefined variable '{name}'");
         }
 
-        public void Assign(string name, object? value)
+        public void Define(string name, object? value)
         {
             _values[name] = value;
         }
