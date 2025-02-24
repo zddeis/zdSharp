@@ -55,3 +55,6 @@ abs(num) // Makes the number always positive
 ```
 
 - Visit the documentation to find more resources like this
+
+
+zd# © 2025 by David Gouveia is licensed under CC BY 4.0
