@@ -20,4 +20,36 @@ namespace zds.Core.Expressions
             return _elements.Select(e => e.Evaluate()).ToList();
         }
     }
+
+    public class IndexExpression : IExpression
+    {
+        private readonly IExpression _array;
+        private readonly IExpression _index;
+
+        public IndexExpression(IExpression array, IExpression index)
+        {
+            _array = array;
+            _index = index;
+        }
+
+        public object? Evaluate()
+        {
+            var array = _array.Evaluate();
+            var index = _index.Evaluate();
+
+            if (array is not List<object?> list)
+                throw new Exception("Cannot index a non-array value");
+
+            if (index is not double d)
+                throw new Exception("Array index must be a number");
+
+            int i = (int)d;
+
+            if (i < 0 || i >= list.Count)
+                throw new Exception($"Array index {i} out of bounds");
+
+            return list[i];
+        }
+    }
+
 }

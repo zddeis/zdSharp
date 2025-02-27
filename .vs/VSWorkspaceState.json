@@ -1,13 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\bin",
-    "\\bin\\Release",
-    "\\bin\\Release\\net8.0",
     "\\Core",
     "\\Core\\Expressions",
-    "\\Core\\Statements"
+    "\\Core\\Statements",
+    "\\obj",
+    "\\obj\\Release"
   ],
-  "SelectedNode": "\\Core\\Interpreter.cs",
+  "SelectedNode": "\\obj\\project.assets.json",
   "PreviewInSolutionExplorer": false
 }

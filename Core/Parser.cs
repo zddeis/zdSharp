@@ -242,6 +242,7 @@ namespace zds.Core
             if (Match(TokenType.Identifier))
             {
                 string name = Previous().Value.ToString()!;
+                IExpression expr = new VariableExpression(name, _environment);
 
                 if (Match(TokenType.LeftParen))
                 {
@@ -256,8 +257,14 @@ namespace zds.Core
                     Consume(TokenType.RightParen, "Expected ')' after arguments");
                     return new CallExpression(name, arguments);
                 }
+                else if (Match(TokenType.LeftBracket))
+                {
+                    var index = Expression();
+                    Consume(TokenType.RightBracket, "Expected ']' after array index");
+                    return new Core.Expressions.IndexExpression(expr, index);
+                }
 
-                return new VariableExpression(name, _environment);
+                return expr;
             }
 
             if (Match(TokenType.LeftBracket))
