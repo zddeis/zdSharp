@@ -70,7 +70,6 @@ namespace zds.Core
                 return null;
             }));
 
-
             _globals.Define("epoch", new NativeFunction((args) =>
             {
                 TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
@@ -79,10 +78,55 @@ namespace zds.Core
 
             _globals.Define("print", new NativeFunction((args) =>
             {
-                string result = string.Join(" ", args.Select(arg => arg?.ToString()));
+                string result = "";
+                foreach (var arg in args)
+                {
+                    result += FormatValue(arg);
+                }
 
                 Console.WriteLine(result);
                 return result;
+            }));
+
+            _globals.Define("input", new NativeFunction((args) =>
+            {
+                string prompt = args.Count > 0 ? args[0].ToString() : "";
+                Console.Write(prompt);
+                return Console.ReadLine();
+            }));
+
+            _globals.Define("length", new NativeFunction((args) =>
+            {
+                if (args.Count == 0) return 0;
+
+                string type = args[0].GetType().Name;
+
+                switch (type)
+                {
+                    case "String":
+                        return (double)((string)args[0]).Length;
+                    case "List`1":
+                        return (double)((List<object>)args[0]).Count;
+                    default:
+                        return 0;
+                }
+            }));
+
+            _globals.Define("typeOf", new NativeFunction((args) =>
+            {
+                if (args.Count == 0) return "null";
+
+                string type = args[0].GetType().Name;
+
+                switch (type)
+                {
+                    case "List`1":
+                        return "array";
+                    case "Double":
+                        return "number";
+                    default:
+                        return type.ToLower();
+                }
             }));
         }
 
@@ -105,7 +149,7 @@ namespace zds.Core
             try
             {
                 _environment = environment;
-                
+
                 foreach (var statement in statements)
                 {
                     if (statement is ReturnStatement ret)
@@ -159,6 +203,43 @@ namespace zds.Core
             }
         }
 
+        private string? FormatValue(object? value)
+        {
+            string type = value?.GetType().Name;
+
+            if (type == "List`1")
+            {
+                string result = "[";
+                List<object> list = (List<object>)value;
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    result += FormatValue(list[i]);
+                    if (i < list.Count - 1)
+                        result += ", ";
+                }
+                result += "]";
+                return result;
+            }
+
+            if (type == "Function" && value is Core.Function function)
+            {
+                string result = function._declaration.Name + "(";
+
+                for (int i = 0; i < function._declaration.Parameters.Count; i++)
+                {
+                    result += function._declaration.Parameters[i];
+                    if (i < function._declaration.Parameters.Count - 1)
+                        result += ", ";
+                }
+
+                result += ")";
+                return result;
+            }
+
+            return value?.ToString();
+        }
+
         private object? EvaluateCall(CallExpression call)
         {
             var callee = _environment.Get(call._name);
@@ -189,8 +270,14 @@ namespace zds.Core
                 LiteralExpression literal => literal.Evaluate(),
                 VariableExpression variable => _environment.Get(variable._name),
                 ArrayExpression array => array.Evaluate(),
+                IndexExpression index => EvaluateIndexExpression(index),
                 _ => throw new Exception($"Unknown expression type: {expression.GetType()}")
             };
+        }
+
+        private object? EvaluateIndexExpression(IndexExpression index)
+        {
+            return index.Evaluate();
         }
 
         private object? EvaluateAssignment(AssignmentExpression assign)
@@ -223,3 +310,4 @@ namespace zds.Core
         }
     }
 }
+
