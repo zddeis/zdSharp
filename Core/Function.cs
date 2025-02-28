@@ -9,7 +9,7 @@ namespace zds.Core
 {
     public class Function
     {
-        private readonly FunctionStatement _declaration;
+        public readonly FunctionStatement _declaration;
         private readonly Environment _closure;
 
         public Function(FunctionStatement declaration, Environment closure)
