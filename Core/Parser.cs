@@ -43,6 +43,27 @@ namespace zds.Core
             return new FunctionStatement(name, parameters, body);
         }
 
+        private ForStatement ForStatement()
+        {
+            var variable = Consume(TokenType.Identifier, "Expected variable name after 'for'").Value.ToString()!;
+            Consume(TokenType.Equals, "Expected '=' after variable name in for loop");
+            var start = Expression();
+
+            Consume(TokenType.To, "Expected 'to' after start value in for loop");
+            var end = Expression();
+
+            IExpression? step = null;
+            if (Match(TokenType.Step))
+            {
+                step = Expression();
+            }
+
+            Consume(TokenType.Then, "Expected 'then' after for loop declaration");
+            var body = Block();
+
+            return new ForStatement(variable, start, end, step, body);
+        }
+
         private WhileStatement WhileStatement()
         {
             var condition = Expression();
@@ -107,6 +128,7 @@ namespace zds.Core
             if (Match(TokenType.While)) return WhileStatement();
             if (Match(TokenType.If)) return IfStatement();
             if (Match(TokenType.Return)) return ReturnStatement();
+            if (Match(TokenType.For)) return ForStatement();
 
             return new ExpressionStatement(Expression());
         }

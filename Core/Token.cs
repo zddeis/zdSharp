@@ -36,6 +36,9 @@ namespace zds.Core
         Else,
         Return,
         Null,
+        For,
+        To,
+        Step,
 
         // Literals
         Number,

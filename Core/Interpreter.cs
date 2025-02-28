@@ -200,8 +200,44 @@ namespace zds.Core
                     while (IsTruthy(EvaluateExpression(whileStmt.Condition)))
                         Execute(whileStmt.Body);
                     break;
+                case ForStatement forStmt:
+                    ExecuteForStatement(forStmt);
+                    break;
                 default:
                     throw new Exception($"Unknown statement type: {statement.GetType()}");
+            }
+        }
+
+        private void ExecuteForStatement(ForStatement forStmt)
+        {
+            // Evaluate start, end, and step expressions
+            var startValue = EvaluateExpression(forStmt.Start);
+            var endValue = EvaluateExpression(forStmt.End);
+            var stepValue = forStmt.Step != null ? EvaluateExpression(forStmt.Step) : 1.0;
+
+            if (startValue is not double start)
+                throw new Exception("For loop start value must be a number");
+            if (endValue is not double end)
+                throw new Exception("For loop end value must be a number");
+            if (stepValue is not double step)
+                throw new Exception("For loop step value must be a number");
+
+            // Initialize the loop variable
+            _environment.Define(forStmt.Variable, start);
+
+            // Determine loop direction
+            bool ascending = step > 0;
+
+            // Execute the loop
+            while ((ascending && (double)_environment.Get(forStmt.Variable) <= end) ||
+                  (!ascending && (double)_environment.Get(forStmt.Variable) >= end))
+            {
+                // Execute the body
+                Execute(forStmt.Body);
+
+                // Update the loop variable
+                double currentValue = (double)_environment.Get(forStmt.Variable);
+                _environment.Define(forStmt.Variable, currentValue + step);
             }
         }
 

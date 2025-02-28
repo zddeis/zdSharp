@@ -26,7 +26,10 @@ namespace zds.Core
             ["return"] = TokenType.Return,
             ["true"] = TokenType.Boolean,
             ["false"] = TokenType.Boolean,
-            ["null"] = TokenType.Null
+            ["null"] = TokenType.Null,
+            ["for"] = TokenType.For,
+            ["to"] = TokenType.To,
+            ["step"] = TokenType.Step
         };
 
         public Tokenizer(string input)
