@@ -52,4 +52,38 @@ namespace zds.Core.Expressions
         }
     }
 
+    public class IndexAssignmentExpression : IExpression
+    {
+        private readonly IExpression _array;
+        private readonly IExpression _index;
+        private readonly IExpression _value;
+
+        public IndexAssignmentExpression(IExpression array, IExpression index, IExpression value)
+        {
+            _array = array;
+            _index = index;
+            _value = value;
+        }
+
+        public object? Evaluate()
+        {
+            var array = _array.Evaluate();
+            var index = _index.Evaluate();
+            var value = _value.Evaluate();
+
+            if (array is not List<object?> list)
+                throw new Exception("Cannot index a non-array value");
+
+            if (index is not double d)
+                throw new Exception("Array index must be a number");
+
+            int i = (int)d;
+
+            if (i < 0 || i >= list.Count)
+                throw new Exception($"Array index {i} out of bounds");
+
+            list[i] = value;
+            return value;
+        }
+    }
 }
