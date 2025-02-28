@@ -140,10 +140,29 @@ namespace zds.Core
 
         private IExpression Assignment()
         {
+            // Check for array index assignment: array[index] = value
             if (Match(TokenType.Identifier))
             {
-                var name = Previous().Value.ToString()!;
+                string name = Previous().Value.ToString()!;
 
+                // Check if this is an array index assignment
+                if (Match(TokenType.LeftBracket))
+                {
+                    var index = Expression();
+                    Consume(TokenType.RightBracket, "Expected ']' after array index");
+
+                    if (Match(TokenType.Equals))
+                    {
+                        var value = Expression();
+                        var array = new VariableExpression(name, _environment);
+                        return new IndexAssignmentExpression(array, index, value);
+                    }
+
+                    // If it's not an assignment, it's just an array access
+                    _current -= 2; // Go back to before the left bracket
+                }
+
+                // Check for regular variable assignment
                 if (Match(TokenType.Equals))
                 {
                     var value = Expression();

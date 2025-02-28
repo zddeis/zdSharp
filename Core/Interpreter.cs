@@ -130,6 +130,24 @@ namespace zds.Core
                         return type.ToLower();
                 }
             }));
+
+            _globals.Define("insert", new NativeFunction((args) =>
+            {
+                if (args.Count < 2)
+                    throw new Exception("insert() requires at least 2 arguments: array and element");
+
+                if (args[0] == null)
+                    throw new Exception("Cannot insert into a null array");
+
+                if (args[0] is not List<object?> array)
+                    throw new Exception("First argument must be an array");
+
+                // Add the new element to the array
+                array.Add(args[1]);
+
+                // Return the modified array
+                return array;
+            }));
         }
 
         public void Run(List<IStatement> statements)
@@ -306,6 +324,7 @@ namespace zds.Core
             return expression switch
             {
                 AssignmentExpression assign => EvaluateAssignment(assign),
+                IndexAssignmentExpression indexAssign => indexAssign.Evaluate(),
                 CallExpression call => EvaluateCall(call),
                 BinaryExpression binary => binary.Evaluate(),
                 LiteralExpression literal => literal.Evaluate(),
