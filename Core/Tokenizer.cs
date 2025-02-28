@@ -25,7 +25,8 @@ namespace zds.Core
             ["else"] = TokenType.Else,
             ["return"] = TokenType.Return,
             ["true"] = TokenType.Boolean,
-            ["false"] = TokenType.Boolean
+            ["false"] = TokenType.Boolean,
+            ["null"] = TokenType.Null
         };
 
         public Tokenizer(string input)
@@ -106,7 +107,8 @@ namespace zds.Core
             string word = identifier.ToString();
             if (Keywords.TryGetValue(word, out TokenType type))
             {
-                object value = type == TokenType.Boolean ? bool.Parse(word) : word;
+                object value = type == TokenType.Boolean ? bool.Parse(word) :
+                               type == TokenType.Null ? null : word;
                 _tokens.Add(new Token(type, value, _line));
             }
             else

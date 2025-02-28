@@ -99,7 +99,7 @@ namespace zds.Core
             {
                 if (args.Count == 0) return 0;
 
-                string type = args[0].GetType().Name;
+                string type = args[0]?.GetType().Name ?? "null";
 
                 switch (type)
                 {
@@ -107,6 +107,8 @@ namespace zds.Core
                         return (double)((string)args[0]).Length;
                     case "List`1":
                         return (double)((List<object>)args[0]).Count;
+                    case "null":
+                        return 0;
                     default:
                         return 0;
                 }
@@ -114,7 +116,7 @@ namespace zds.Core
 
             _globals.Define("typeOf", new NativeFunction((args) =>
             {
-                if (args.Count == 0) return "null";
+                if (args.Count == 0 || args[0] == null) return "null";
 
                 string type = args[0].GetType().Name;
 
@@ -205,7 +207,10 @@ namespace zds.Core
 
         private string? FormatValue(object? value)
         {
-            string type = value?.GetType().Name;
+            if (value == null)
+                return "null";
+
+            string type = value.GetType().Name;
 
             if (type == "List`1")
             {
@@ -237,7 +242,7 @@ namespace zds.Core
                 return result;
             }
 
-            return value?.ToString();
+            return value.ToString();
         }
 
         private object? EvaluateCall(CallExpression call)
@@ -310,4 +315,3 @@ namespace zds.Core
         }
     }
 }
-

@@ -35,6 +35,7 @@ namespace zds.Core
         Then,
         Else,
         Return,
+        Null,
 
         // Literals
         Number,

@@ -238,6 +238,7 @@ namespace zds.Core
             if (Match(TokenType.Number)) return new LiteralExpression(Previous().Value);
             if (Match(TokenType.String)) return new LiteralExpression(Previous().Value);
             if (Match(TokenType.Boolean)) return new LiteralExpression(Previous().Value);
+            if (Match(TokenType.Null)) return new LiteralExpression(null);
 
             if (Match(TokenType.Identifier))
             {
