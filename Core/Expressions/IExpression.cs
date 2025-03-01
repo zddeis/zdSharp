@@ -9,5 +9,6 @@ namespace zds.Core.Expressions
     public interface IExpression
     {
         object? Evaluate();
+        int Line { get; }
     }
 }

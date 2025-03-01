@@ -11,6 +11,7 @@ namespace zds.Core.Expressions
         private readonly IExpression _left;
         private readonly Token _operator;
         private readonly IExpression _right;
+        public int Line => _operator.Line;
 
         public BinaryExpression(IExpression left, Token op, IExpression right)
         {
@@ -21,25 +22,36 @@ namespace zds.Core.Expressions
 
         public object? Evaluate()
         {
-            var left = _left.Evaluate();
-            var right = _right.Evaluate();
-
-            return _operator.Type switch
+            try
             {
-                TokenType.Plus => Add(left, right),
-                TokenType.Minus => Subtract(left, right),
-                TokenType.Multiply => Multiply(left, right),
-                TokenType.Divide => Divide(left, right),
-                TokenType.EqualsEquals => Equals(left, right),
-                TokenType.NotEquals => NotEquals(left, right),
-                TokenType.Or => Or(left, right),
-                TokenType.And => And(left, right),
-                TokenType.Greater => Greater(left, right),
-                TokenType.Less => Less(left, right),
-                TokenType.GreaterEquals => GreaterEquals(left, right),
-                TokenType.LessEquals => LessEquals(left, right),
-                _ => throw new Exception($"Unknown operator {_operator.Type}")
-            };
+                var left = _left.Evaluate();
+                var right = _right.Evaluate();
+
+                return _operator.Type switch
+                {
+                    TokenType.Plus => Add(left, right),
+                    TokenType.Minus => Subtract(left, right),
+                    TokenType.Multiply => Multiply(left, right),
+                    TokenType.Divide => Divide(left, right),
+                    TokenType.EqualsEquals => Equals(left, right),
+                    TokenType.NotEquals => NotEquals(left, right),
+                    TokenType.Or => Or(left, right),
+                    TokenType.And => And(left, right),
+                    TokenType.Greater => Greater(left, right),
+                    TokenType.Less => Less(left, right),
+                    TokenType.GreaterEquals => GreaterEquals(left, right),
+                    TokenType.LessEquals => LessEquals(left, right),
+                    _ => throw new RuntimeException($"Unknown operator {_operator.Type}", Line)
+                };
+            }
+            catch (RuntimeException)
+            {
+                throw; // Re-throw runtime exceptions that already have line info
+            }
+            catch (Exception ex)
+            {
+                throw new RuntimeException(ex.Message, Line);
+            }
         }
 
         private static object Add(object? left, object? right)

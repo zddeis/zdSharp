@@ -145,20 +145,22 @@ namespace zds.Core
             if (Match(TokenType.Equals))
             {
                 var value = Expression();
+                int line = Previous().Line;
 
                 if (expr is VariableExpression variable)
                 {
-                    return new AssignmentExpression(variable._name, value, _environment);
+                    return new AssignmentExpression(variable._name, value, _environment, line);
                 }
                 else if (expr is Expressions.IndexExpression indexExpr)
                 {
                     return new IndexAssignmentExpression(
                         ((Expressions.IndexExpression)expr)._array,
                         ((Expressions.IndexExpression)expr)._index,
-                        value);
+                        value,
+                        line);
                 }
 
-                throw new Exception("Invalid assignment target");
+                throw new ParseException("Invalid assignment target", line);
             }
 
             return expr;
@@ -251,15 +253,18 @@ namespace zds.Core
 
         private IExpression Primary()
         {
-            if (Match(TokenType.Number)) return new LiteralExpression(Previous().Value);
-            if (Match(TokenType.String)) return new LiteralExpression(Previous().Value);
-            if (Match(TokenType.Boolean)) return new LiteralExpression(Previous().Value);
-            if (Match(TokenType.Null)) return new LiteralExpression(null);
+            Token current = Peek();
+            int line = current.Line;
+
+            if (Match(TokenType.Number)) return new LiteralExpression(Previous().Value, line);
+            if (Match(TokenType.String)) return new LiteralExpression(Previous().Value, line);
+            if (Match(TokenType.Boolean)) return new LiteralExpression(Previous().Value, line);
+            if (Match(TokenType.Null)) return new LiteralExpression(null, line);
 
             if (Match(TokenType.Identifier))
             {
                 string name = Previous().Value.ToString()!;
-                IExpression expr = new VariableExpression(name, _environment);
+                IExpression expr = new VariableExpression(name, _environment, line);
 
                 if (Match(TokenType.LeftParen))
                 {
@@ -272,7 +277,7 @@ namespace zds.Core
                         } while (Match(TokenType.Comma));
                     }
                     Consume(TokenType.RightParen, "Expected ')' after arguments");
-                    return new CallExpression(name, arguments);
+                    return new CallExpression(name, arguments, line);
                 }
                 else if (Match(TokenType.LeftBracket))
                 {
@@ -283,10 +288,10 @@ namespace zds.Core
                     if (Match(TokenType.Equals))
                     {
                         var value = Expression();
-                        return new IndexAssignmentExpression(expr, index, value);
+                        return new IndexAssignmentExpression(expr, index, value, line);
                     }
 
-                    return new Core.Expressions.IndexExpression(expr, index);
+                    return new Core.Expressions.IndexExpression(expr, index, line);
                 }
                 else if (Match(TokenType.Period))
                 {
@@ -307,17 +312,17 @@ namespace zds.Core
                         Consume(TokenType.RightParen, "Expected ')' after arguments");
 
                         // Create a method call expression
-                        return new Expressions.MethodCallExpression(expr, property, arguments);
+                        return new Expressions.MethodCallExpression(expr, property, arguments, line);
                     }
 
                     // Check if this is a property assignment
                     if (Match(TokenType.Equals))
                     {
                         var value = Expression();
-                        return new PropertyExpression(expr, property, value);
+                        return new PropertyExpression(expr, property, value, line);
                     }
 
-                    return new PropertyAccessExpression(expr, property);
+                    return new PropertyAccessExpression(expr, property, line);
                 }
 
                 return expr;
@@ -334,7 +339,7 @@ namespace zds.Core
                     } while (Match(TokenType.Comma));
                 }
                 Consume(TokenType.RightBracket, "Expected ']' after array elements");
-                return new ArrayExpression(elements);
+                return new ArrayExpression(elements, line);
             }
 
             if (Match(TokenType.LeftParen))
@@ -344,7 +349,7 @@ namespace zds.Core
                 return expr;
             }
 
-            throw new Exception($"Unexpected token: {Peek()}");
+            throw new ParseException($"Unexpected token: {Peek()}", line);
         }
 
         private bool Match(TokenType type)
@@ -387,7 +392,7 @@ namespace zds.Core
         private Token Consume(TokenType type, string message)
         {
             if (Check(type)) return Advance();
-            throw new Exception($"{message} at token {Peek()}");
+            throw new ParseException(message, Peek().Line);
         }
     }
 }

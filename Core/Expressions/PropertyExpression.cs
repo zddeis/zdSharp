@@ -11,66 +11,79 @@ namespace zds.Core.Expressions
         private readonly IExpression _object;
         private readonly string _property;
         private readonly IExpression _value;
+        public int Line { get; }
 
-        public PropertyExpression(IExpression obj, string property, IExpression value)
+        public PropertyExpression(IExpression obj, string property, IExpression value, int line = 0)
         {
             _object = obj;
             _property = property;
             _value = value;
+            Line = line;
         }
 
         public object? Evaluate()
         {
-            var obj = _object.Evaluate();
-            var value = _value.Evaluate();
-
-            if (obj is Window window)
+            try
             {
-                switch (_property)
-                {
-                    case "Width":
-                        if (value is double width)
-                            window.Width = (int)width;
-                        else
-                            throw new Exception("Width property must be a number");
-                        break;
-                    case "Height":
-                        if (value is double height)
-                            window.Height = (int)height;
-                        else
-                            throw new Exception("Height property must be a number");
-                        break;
-                    case "FullScreen":
-                        if (value is bool fullScreen)
-                            window.FullScreen = fullScreen;
-                        else
-                            throw new Exception("FullScreen property must be a boolean");
-                        break;
-                    case "MaxRefreshRate":
-                        if (value is double refreshRate)
-                            window.MaxRefreshRate = (int)refreshRate;
-                        else
-                            throw new Exception("MaxRefreshRate property must be a number");
-                        break;
-                    case "BackgroundColor":
-                        if (value is string color)
-                            window.BackgroundColor = color;
-                        else
-                            throw new Exception("BackgroundColor property must be a string");
-                        break;
-                    case "Title":
-                        if (value is string title)
-                            window.SetTitle(title);
-                        else
-                            throw new Exception("Title property must be a string");
-                        break;
-                    default:
-                        throw new Exception($"Unknown property '{_property}' for Window object");
-                }
-                return value;
-            }
+                var obj = _object.Evaluate();
+                var value = _value.Evaluate();
 
-            throw new Exception($"Cannot set property on non-object value");
+                if (obj is Window window)
+                {
+                    switch (_property)
+                    {
+                        case "Width":
+                            if (value is double width)
+                                window.Width = (int)width;
+                            else
+                                throw new RuntimeException("Width property must be a number", Line);
+                            break;
+                        case "Height":
+                            if (value is double height)
+                                window.Height = (int)height;
+                            else
+                                throw new RuntimeException("Height property must be a number", Line);
+                            break;
+                        case "FullScreen":
+                            if (value is bool fullScreen)
+                                window.FullScreen = fullScreen;
+                            else
+                                throw new RuntimeException("FullScreen property must be a boolean", Line);
+                            break;
+                        case "MaxRefreshRate":
+                            if (value is double refreshRate)
+                                window.MaxRefreshRate = (int)refreshRate;
+                            else
+                                throw new RuntimeException("MaxRefreshRate property must be a number", Line);
+                            break;
+                        case "BackgroundColor":
+                            if (value is string color)
+                                window.BackgroundColor = color;
+                            else
+                                throw new RuntimeException("BackgroundColor property must be a string", Line);
+                            break;
+                        case "Title":
+                            if (value is string title)
+                                window.SetTitle(title);
+                            else
+                                throw new RuntimeException("Title property must be a string", Line);
+                            break;
+                        default:
+                            throw new RuntimeException($"Unknown property '{_property}' for Window object", Line);
+                    }
+                    return value;
+                }
+
+                throw new RuntimeException($"Cannot set property on non-object value", Line);
+            }
+            catch (RuntimeException)
+            {
+                throw; // Re-throw runtime exceptions that already have line info
+            }
+            catch (Exception ex)
+            {
+                throw new RuntimeException(ex.Message, Line);
+            }
         }
     }
 }

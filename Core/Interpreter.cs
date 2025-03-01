@@ -653,7 +653,22 @@ namespace zds.Core
 
         public void Run(List<IStatement> statements)
         {
-            Execute(statements);
+            try
+            {
+                Execute(statements);
+            }
+            catch (RuntimeException ex)
+            {
+                Log.Error($"{ex.Message} (line {ex.Line})");
+            }
+            catch (ParseException ex)
+            {
+                Log.Error($"{ex.Message} (line {ex.Line})");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+            }
         }
 
         private void Execute(List<IStatement> statements)
@@ -705,33 +720,45 @@ namespace zds.Core
 
         private void ExecuteStatement(IStatement statement)
         {
-            switch (statement)
+            try
             {
-                case ExpressionStatement expr:
-                    EvaluateExpression(expr.Expression);
-                    break;
-                case FunctionStatement func:
-                    var function = new Function(func, _environment);
-                    _environment.Define(func.Name, function);
-                    break;
-                case IfStatement ifStmt:
-                    if (IsTruthy(EvaluateExpression(ifStmt.Condition)))
-                        Execute(ifStmt.ThenBranch);
-                    else if (ifStmt.ElseBranch != null)
-                        Execute(ifStmt.ElseBranch);
-                    break;
-                case ReturnStatement ret:
-                    object? value = ret.Value != null ? EvaluateExpression(ret.Value) : null;
-                    throw new ReturnException(value);
-                case WhileStatement whileStmt:
-                    while (IsTruthy(EvaluateExpression(whileStmt.Condition)))
-                        Execute(whileStmt.Body);
-                    break;
-                case ForStatement forStmt:
-                    ExecuteForStatement(forStmt);
-                    break;
-                default:
-                    throw new Exception($"Unknown statement type: {statement.GetType()}");
+                switch (statement)
+                {
+                    case ExpressionStatement expr:
+                        EvaluateExpression(expr.Expression);
+                        break;
+                    case FunctionStatement func:
+                        var function = new Function(func, _environment);
+                        _environment.Define(func.Name, function);
+                        break;
+                    case IfStatement ifStmt:
+                        if (IsTruthy(EvaluateExpression(ifStmt.Condition)))
+                            Execute(ifStmt.ThenBranch);
+                        else if (ifStmt.ElseBranch != null)
+                            Execute(ifStmt.ElseBranch);
+                        break;
+                    case ReturnStatement ret:
+                        object? value = ret.Value != null ? EvaluateExpression(ret.Value) : null;
+                        throw new ReturnException(value);
+                    case WhileStatement whileStmt:
+                        while (IsTruthy(EvaluateExpression(whileStmt.Condition)))
+                            Execute(whileStmt.Body);
+                        break;
+                    case ForStatement forStmt:
+                        ExecuteForStatement(forStmt);
+                        break;
+                    default:
+                        throw new Exception($"Unknown statement type: {statement.GetType()}");
+                }
+            }
+            catch (RuntimeException)
+            {
+                throw; // Re-throw runtime exceptions that already have line info
+            }
+            catch (Exception ex)
+            {
+                // For other exceptions, we don't have line info
+                throw new RuntimeException(ex.Message, 0);
             }
         }
 
@@ -743,11 +770,11 @@ namespace zds.Core
             var stepValue = forStmt.Step != null ? EvaluateExpression(forStmt.Step) : 1.0;
 
             if (startValue is not double start)
-                throw new Exception("For loop start value must be a number");
+                throw new RuntimeException("For loop start value must be a number", 0);
             if (endValue is not double end)
-                throw new Exception("For loop end value must be a number");
+                throw new RuntimeException("For loop end value must be a number", 0);
             if (stepValue is not double step)
-                throw new Exception("For loop step value must be a number");
+                throw new RuntimeException("For loop step value must be a number", 0);
 
             // Save the current value of the loop variable
             object? previousValue = _environment._values.TryGetValue(forStmt.Variable, out object? value) ? value : null;
@@ -827,48 +854,82 @@ namespace zds.Core
 
         private object? EvaluateCall(CallExpression call)
         {
-            var callee = _environment.Get(call._name);
-
-            if (callee is NativeFunction nativeFunction)
+            try
             {
-                var arguments = call._arguments.Select(arg => EvaluateExpression(arg)).ToList();
-                return nativeFunction.Call(arguments);
-            }
+                var callee = _environment.Get(call._name);
 
-            if (callee is Function function)
+                if (callee is NativeFunction nativeFunction)
+                {
+                    var arguments = call._arguments.Select(arg => EvaluateExpression(arg)).ToList();
+                    return nativeFunction.Call(arguments);
+                }
+
+                if (callee is Function function)
+                {
+                    var arguments = call._arguments.Select(arg => EvaluateExpression(arg)).ToList();
+
+                    return function.Call(this, arguments);
+                }
+
+                throw new RuntimeException($"'{call._name}' is not defined as a function", call.Line);
+            }
+            catch (RuntimeException)
             {
-                var arguments = call._arguments.Select(arg => EvaluateExpression(arg)).ToList();
-
-                return function.Call(this, arguments);
+                throw; // Re-throw runtime exceptions that already have line info
             }
-
-            throw new Exception($"'{call._name}' is not defined as a function");
+            catch (Exception ex)
+            {
+                throw new RuntimeException(ex.Message, call.Line);
+            }
         }
 
         private object? EvaluateExpression(IExpression expression)
         {
-            return expression switch
+            try
             {
-                AssignmentExpression assign => EvaluateAssignment(assign),
-                IndexAssignmentExpression indexAssign => indexAssign.Evaluate(),
-                PropertyExpression property => property.Evaluate(),
-                PropertyAccessExpression propertyAccess => propertyAccess.Evaluate(),
-                MethodCallExpression methodCall => methodCall.Evaluate(),
-                CallExpression call => EvaluateCall(call),
-                BinaryExpression binary => binary.Evaluate(),
-                LiteralExpression literal => literal.Evaluate(),
-                VariableExpression variable => _environment.Get(variable._name),
-                ArrayExpression array => array.Evaluate(),
-                IndexExpression index => index.Evaluate(),
-                _ => throw new Exception($"Unknown expression type: {expression.GetType()}")
-            };
+                return expression switch
+                {
+                    AssignmentExpression assign => EvaluateAssignment(assign),
+                    IndexAssignmentExpression indexAssign => indexAssign.Evaluate(),
+                    PropertyExpression property => property.Evaluate(),
+                    PropertyAccessExpression propertyAccess => propertyAccess.Evaluate(),
+                    MethodCallExpression methodCall => methodCall.Evaluate(),
+                    CallExpression call => EvaluateCall(call),
+                    BinaryExpression binary => binary.Evaluate(),
+                    LiteralExpression literal => literal.Evaluate(),
+                    VariableExpression variable => _environment.Get(variable._name),
+                    ArrayExpression array => array.Evaluate(),
+                    IndexExpression index => index.Evaluate(),
+                    _ => throw new RuntimeException($"Unknown expression type: {expression.GetType()}", 0)
+                };
+            }
+            catch (RuntimeException)
+            {
+                throw; // Re-throw runtime exceptions that already have line info
+            }
+            catch (Exception ex)
+            {
+                int line = expression is IExpression expr ? expr.Line : 0;
+                throw new RuntimeException(ex.Message, line);
+            }
         }
 
         private object? EvaluateAssignment(AssignmentExpression assign)
         {
-            var value = EvaluateExpression(assign._value);
-            _environment.Define(assign._name, value);
-            return value;
+            try
+            {
+                var value = EvaluateExpression(assign._value);
+                _environment.Define(assign._name, value);
+                return value;
+            }
+            catch (RuntimeException)
+            {
+                throw; // Re-throw runtime exceptions that already have line info
+            }
+            catch (Exception ex)
+            {
+                throw new RuntimeException(ex.Message, assign.Line);
+            }
         }
 
         private bool IsTruthy(object? value)
@@ -891,6 +952,26 @@ namespace zds.Core
         public object? Call(List<object?> arguments)
         {
             return _function(arguments);
+        }
+    }
+
+    public class RuntimeException : Exception
+    {
+        public int Line { get; }
+
+        public RuntimeException(string message, int line) : base(message)
+        {
+            Line = line;
+        }
+    }
+
+    public class ParseException : Exception
+    {
+        public int Line { get; }
+
+        public ParseException(string message, int line) : base(message)
+        {
+            Line = line;
         }
     }
 }
