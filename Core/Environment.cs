@@ -8,7 +8,7 @@ namespace zds.Core
 {
     public class Environment
     {
-        public readonly Dictionary<string, object?> _values = new();
+        public Dictionary<string, object?> _values = new();
         private readonly Environment? _enclosing;
 
         public Environment(Environment? enclosing = null)

@@ -20,23 +20,28 @@ namespace zds.Core
 
         public object? Call(Interpreter interpreter, List<object?> arguments)
         {
-            var environment = new Environment(_closure);
-
             // Validate argument count
             if (arguments.Count != _declaration.Parameters.Count)
             {
                 throw new Exception($"Expected {_declaration.Parameters.Count} arguments but got {arguments.Count}");
             }
 
-            // Define parameters in the function's environment
+            Dictionary<string, object?>? passingParams = new();           
+
+            // Add the arguments to the dictionary
             for (int i = 0; i < _declaration.Parameters.Count; i++)
             {
-                environment.Define(_declaration.Parameters[i], arguments[i]);
+                passingParams.Add(_declaration.Parameters[i], arguments[i]);
             }
 
+            // If no arguments are passed, set the dictionary to null
+            if (passingParams.Count == 0)
+                passingParams = null;
+
+            // Execute the function's body with the new vars
             try
             {
-                return interpreter.ExecuteBlock(_declaration.Body, environment);
+                return interpreter.ExecuteBlock(_declaration.Body, passingParams);
             }
             catch (ReturnException returnValue)
             {

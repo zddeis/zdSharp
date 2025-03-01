@@ -417,15 +417,20 @@ namespace zds.Core
                 ExecuteStatement(statement);
         }
 
-        public object? ExecuteBlock(List<IStatement> statements, Environment environment)
+        public object? ExecuteBlock(List<IStatement> statements, Dictionary<string, object?>? passingParams = null)
         {
-            var previous = _environment;
+            // Save previous values
+            Dictionary<string, object?> previousValues = new(_environment._values);
             object? lastValue = null;
 
             try
             {
-                _environment = environment;
+                // Define passed parameters
+                if(passingParams != null)
+                    foreach (var param in passingParams)
+                        _environment.Define(param.Key, param.Value);
 
+                // Execute the block
                 foreach (var statement in statements)
                 {
                     if (statement is ReturnStatement ret)
@@ -446,7 +451,10 @@ namespace zds.Core
             }
             finally
             {
-                _environment = previous;
+                // Restore previous values
+                foreach (var param in _environment._values)
+                    if (!previousValues.TryGetValue(param.Key, out object? value))
+                        _environment._values.Remove(param.Key);
             }
         }
 
@@ -496,6 +504,9 @@ namespace zds.Core
             if (stepValue is not double step)
                 throw new Exception("For loop step value must be a number");
 
+            // Save the current value of the loop variable
+            object? previousValue = _environment._values.TryGetValue(forStmt.Variable, out object? value) ? value : null;
+
             // Initialize the loop variable
             _environment.Define(forStmt.Variable, start);
 
@@ -512,6 +523,12 @@ namespace zds.Core
                 double currentValue = (double)_environment.Get(forStmt.Variable);
                 _environment.Define(forStmt.Variable, currentValue + step);
             }
+
+            // Restore the previous value of the loop variable
+            if(previousValue == null)
+                _environment._values.Remove(forStmt.Variable);
+            else
+                _environment.Define(forStmt.Variable, previousValue);
         }
 
         private string? FormatValue(object? value)
