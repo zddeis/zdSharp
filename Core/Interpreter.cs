@@ -605,14 +605,9 @@ namespace zds.Core
                 LiteralExpression literal => literal.Evaluate(),
                 VariableExpression variable => _environment.Get(variable._name),
                 ArrayExpression array => array.Evaluate(),
-                IndexExpression index => EvaluateIndexExpression(index),
+                IndexExpression index => index.Evaluate(),
                 _ => throw new Exception($"Unknown expression type: {expression.GetType()}")
             };
-        }
-
-        private object? EvaluateIndexExpression(IndexExpression index)
-        {
-            return index.Evaluate();
         }
 
         private object? EvaluateAssignment(AssignmentExpression assign)
