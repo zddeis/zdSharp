@@ -292,6 +292,24 @@ namespace zds.Core
                 {
                     var property = Consume(TokenType.Identifier, "Expected property name after '.'").Value.ToString()!;
 
+                    // Check if this is a method call
+                    if (Check(TokenType.LeftParen))
+                    {
+                        Advance(); // Consume the left parenthesis
+                        var arguments = new List<IExpression>();
+                        if (!Check(TokenType.RightParen))
+                        {
+                            do
+                            {
+                                arguments.Add(Expression());
+                            } while (Match(TokenType.Comma));
+                        }
+                        Consume(TokenType.RightParen, "Expected ')' after arguments");
+
+                        // Create a method call expression
+                        return new Expressions.MethodCallExpression(expr, property, arguments);
+                    }
+
                     // Check if this is a property assignment
                     if (Match(TokenType.Equals))
                     {
