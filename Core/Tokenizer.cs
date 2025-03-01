@@ -158,6 +158,7 @@ namespace zds.Core
                 case '/': _tokens.Add(new Token(TokenType.Divide, "/", _line)); break;
                 case '|': _tokens.Add(new Token(TokenType.Or, "|", _line)); break;
                 case '&': _tokens.Add(new Token(TokenType.And, "&", _line)); break;
+                case '.': _tokens.Add(new Token(TokenType.Period, ".", _line)); break;
                 case '=':
                     if (Peek() == '=')
                     {

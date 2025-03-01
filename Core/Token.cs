@@ -67,6 +67,7 @@ namespace zds.Core
         LeftBracket,
         RightBracket,
         Comma,
+        Period,
 
         // End of File
         EOF

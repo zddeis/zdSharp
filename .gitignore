@@ -1,3 +1,5 @@
 .vs/
 .git/
 bin/
+zds.csproj.user
+zds.sln

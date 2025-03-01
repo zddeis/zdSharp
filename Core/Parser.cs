@@ -140,34 +140,28 @@ namespace zds.Core
 
         private IExpression Assignment()
         {
-            if (Match(TokenType.Identifier))
-            {
-                var name = Previous().Value.ToString()!;
+            var expr = LogicalOr();
 
-                if (Match(TokenType.Equals))
+            if (Match(TokenType.Equals))
+            {
+                var value = Expression();
+
+                if (expr is VariableExpression variable)
                 {
-                    var value = Expression();
-                    return new AssignmentExpression(name, value, _environment);
+                    return new AssignmentExpression(variable._name, value, _environment);
+                }
+                else if (expr is Expressions.IndexExpression indexExpr)
+                {
+                    return new IndexAssignmentExpression(
+                        ((Expressions.IndexExpression)expr)._array,
+                        ((Expressions.IndexExpression)expr)._index,
+                        value);
                 }
 
-                _current--; // Go back to the identifier token
+                throw new Exception("Invalid assignment target");
             }
 
-            return LogicalOr();
-        }
-
-        private IExpression ParseOperators(IExpression left)
-        {
-            while (Match(TokenType.Or) || Match(TokenType.And) ||
-                   Match(TokenType.Greater) || Match(TokenType.Less) ||
-                   Match(TokenType.GreaterEquals) || Match(TokenType.LessEquals) ||
-                   Match(TokenType.EqualsEquals) || Match(TokenType.NotEquals))
-            {
-                var op = Previous();
-                var right = LogicalOr();
-                left = new Expressions.BinaryExpression(left, op, right);
-            }
-            return left;
+            return expr;
         }
 
         private IExpression LogicalOr()
@@ -284,7 +278,28 @@ namespace zds.Core
                 {
                     var index = Expression();
                     Consume(TokenType.RightBracket, "Expected ']' after array index");
+
+                    // Check if this is an assignment to an array element
+                    if (Match(TokenType.Equals))
+                    {
+                        var value = Expression();
+                        return new IndexAssignmentExpression(expr, index, value);
+                    }
+
                     return new Core.Expressions.IndexExpression(expr, index);
+                }
+                else if (Match(TokenType.Period))
+                {
+                    var property = Consume(TokenType.Identifier, "Expected property name after '.'").Value.ToString()!;
+
+                    // Check if this is a property assignment
+                    if (Match(TokenType.Equals))
+                    {
+                        var value = Expression();
+                        return new PropertyExpression(expr, property, value);
+                    }
+
+                    return new VariableExpression($"{name}.{property}", _environment);
                 }
 
                 return expr;

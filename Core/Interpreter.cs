@@ -62,6 +62,152 @@ namespace zds.Core
                 return result;
             }));
 
+            // Window Functions
+            _globals.Define("window", new NativeFunction((args) =>
+            {
+                if (args.Count < 2)
+                    throw new Exception("window() requires two number arguments: sizeX and sizeY");
+
+                if (args[0] is not double width)
+                    throw new Exception("First argument (sizeX) must be a number");
+
+                if (args[1] is not double height)
+                    throw new Exception("Second argument (sizeY) must be a number");
+
+                var window = new Window((int)width, (int)height);
+                window.Show();
+                return window;
+            }));
+
+            // Panel Functions
+            _globals.Define("createPanel", new NativeFunction((args) =>
+            {
+                if (args.Count < 1)
+                    throw new Exception("createPanel() requires a window argument");
+
+                if (args[0] is not Window window)
+                    throw new Exception("First argument must be a window object");
+
+                int width = window.GetForm().ClientSize.Width;
+                int height = window.GetForm().ClientSize.Height;
+
+                return new Panel(window, width, height);
+            }));
+
+            // Timer Functions
+            _globals.Define("setTimeout", new NativeFunction((args) =>
+            {
+                if (args.Count < 2)
+                    throw new Exception("setTimeout() requires a function and delay time in milliseconds");
+
+                if (args[0] is not Function callback)
+                    throw new Exception("First argument must be a function");
+
+                if (args[1] is not double delayMs)
+                    throw new Exception("Second argument must be a number (delay in milliseconds)");
+
+                var timer = new System.Windows.Forms.Timer();
+                timer.Interval = (int)delayMs;
+                timer.Tick += (sender, e) =>
+                {
+                    timer.Stop();
+                    try
+                    {
+                        callback.Call(this, new List<object?>());
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"Error in setTimeout callback: {ex.Message}");
+                    }
+                };
+                timer.Start();
+
+                return timer;
+            }));
+
+            _globals.Define("setInterval", new NativeFunction((args) =>
+            {
+                if (args.Count < 2)
+                    throw new Exception("setInterval() requires a function and interval time in milliseconds");
+
+                if (args[0] is not Function callback)
+                    throw new Exception("First argument must be a function");
+
+                if (args[1] is not double intervalMs)
+                    throw new Exception("Second argument must be a number (interval in milliseconds)");
+
+                var timer = new System.Windows.Forms.Timer();
+                timer.Interval = (int)intervalMs;
+                timer.Tick += (sender, e) =>
+                {
+                    try
+                    {
+                        callback.Call(this, new List<object?>());
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"Error in setInterval callback: {ex.Message}");
+                        timer.Stop();
+                    }
+                };
+                timer.Start();
+
+                return timer;
+            }));
+
+            _globals.Define("clearTimeout", new NativeFunction((args) =>
+            {
+                if (args.Count < 1)
+                    throw new Exception("clearTimeout() requires a timer object");
+
+                if (args[0] is System.Windows.Forms.Timer timer)
+                {
+                    timer.Stop();
+                    timer.Dispose();
+                }
+
+                return null;
+            }));
+
+            // Key handling functions
+            _globals.Define("onKeyDown", new NativeFunction((args) =>
+            {
+                if (args.Count < 3)
+                    throw new Exception("onKeyDown() requires three arguments: window, key, and handler function");
+
+                if (args[0] is not Window window)
+                    throw new Exception("First argument must be a window object");
+
+                string key = args[1]?.ToString() ?? "";
+                if (string.IsNullOrEmpty(key))
+                    throw new Exception("Second argument (key) must be a non-empty string");
+
+                if (args[2] is not Function handler)
+                    throw new Exception("Third argument must be a function");
+
+                window.OnKeyDown(key, handler);
+                return null;
+            }));
+
+            _globals.Define("onKeyUp", new NativeFunction((args) =>
+            {
+                if (args.Count < 3)
+                    throw new Exception("onKeyUp() requires three arguments: window, key, and handler function");
+
+                if (args[0] is not Window window)
+                    throw new Exception("First argument must be a window object");
+
+                string key = args[1]?.ToString() ?? "";
+                if (string.IsNullOrEmpty(key))
+                    throw new Exception("Second argument (key) must be a non-empty string");
+
+                if (args[2] is not Function handler)
+                    throw new Exception("Third argument must be a function");
+
+                window.OnKeyUp(key, handler);
+                return null;
+            }));
+
             // Math Functions
 
             _globals.Define("max", new NativeFunction((args) =>
@@ -260,6 +406,8 @@ namespace zds.Core
                         return "array";
                     case "Double":
                         return "number";
+                    case "Window":
+                        return "window";
                     default:
                         return type.ToLower();
                 }
@@ -523,7 +671,7 @@ namespace zds.Core
             try
             {
                 // Define passed parameters
-                if(passingParams != null)
+                if (passingParams != null)
                     foreach (var param in passingParams)
                         _environment.Define(param.Key, param.Value);
 
@@ -622,7 +770,7 @@ namespace zds.Core
             }
 
             // Restore the previous value of the loop variable
-            if(previousValue == null)
+            if (previousValue == null)
                 _environment._values.Remove(forStmt.Variable);
             else
                 _environment.Define(forStmt.Variable, previousValue);
@@ -667,6 +815,12 @@ namespace zds.Core
                 return result;
             }
 
+            // Format Windows
+            if (type == "Window")
+            {
+                return "[Window Object]";
+            }
+
             // Return other types as strings
             return value.ToString();
         }
@@ -697,6 +851,7 @@ namespace zds.Core
             {
                 AssignmentExpression assign => EvaluateAssignment(assign),
                 IndexAssignmentExpression indexAssign => indexAssign.Evaluate(),
+                PropertyExpression property => property.Evaluate(),
                 CallExpression call => EvaluateCall(call),
                 BinaryExpression binary => binary.Evaluate(),
                 LiteralExpression literal => literal.Evaluate(),

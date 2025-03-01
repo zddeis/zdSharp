@@ -23,8 +23,8 @@ namespace zds.Core.Expressions
 
     public class IndexExpression : IExpression
     {
-        private readonly IExpression _array;
-        private readonly IExpression _index;
+        public readonly IExpression _array;
+        public readonly IExpression _index;
 
         public IndexExpression(IExpression array, IExpression index)
         {
