@@ -46,6 +46,7 @@ namespace zds.Core
                 return result;
             }));
 
+            // Math Functions
             _globals.Define("round", new NativeFunction((args) =>
             {
                 if (args.Count == 0) return 0;
@@ -62,6 +63,44 @@ namespace zds.Core
             {
                 if (args.Count == 0) return 0;
                 return Math.Abs(Convert.ToDecimal(args[0]));
+            }));
+
+            // New Math Functions
+            _globals.Define("sin", new NativeFunction((args) =>
+            {
+                if (args.Count == 0) return 0;
+                if (args[0] is not double d) return 0;
+                return Math.Sin(d);
+            }));
+
+            _globals.Define("cos", new NativeFunction((args) =>
+            {
+                if (args.Count == 0) return 0;
+                if (args[0] is not double d) return 0;
+                return Math.Cos(d);
+            }));
+
+            _globals.Define("tan", new NativeFunction((args) =>
+            {
+                if (args.Count == 0) return 0;
+                if (args[0] is not double d) return 0;
+                return Math.Tan(d);
+            }));
+
+            _globals.Define("sqrt", new NativeFunction((args) =>
+            {
+                if (args.Count == 0) return 0;
+                if (args[0] is not double d) return 0;
+                if (d < 0) throw new Exception("Cannot calculate square root of a negative number");
+                return Math.Sqrt(d);
+            }));
+
+            _globals.Define("pow", new NativeFunction((args) =>
+            {
+                if (args.Count < 2) return 0;
+                if (args[0] is not double baseNum) return 0;
+                if (args[1] is not double exponent) return 0;
+                return Math.Pow(baseNum, exponent);
             }));
 
             _globals.Define("clear", new NativeFunction((args) =>
@@ -103,14 +142,12 @@ namespace zds.Core
 
                 switch (type)
                 {
-                    case "String":
-                        return (double)((string)args[0]).Length;
                     case "List`1":
                         return (double)((List<object>)args[0]).Count;
                     case "null":
                         return 0;
                     default:
-                        return 0;
+                        return (double)(args[0].ToString()).Length;
                 }
             }));
 
@@ -131,6 +168,7 @@ namespace zds.Core
                 }
             }));
 
+            // Array Operations
             _globals.Define("insert", new NativeFunction((args) =>
             {
                 if (args.Count < 2)
@@ -147,6 +185,224 @@ namespace zds.Core
 
                 // Return the modified array
                 return array;
+            }));
+
+            _globals.Define("sort", new NativeFunction((args) =>
+            {
+                if (args.Count < 1)
+                    throw new Exception("sort() requires an array argument");
+
+                if (args[0] == null)
+                    throw new Exception("Cannot sort a null array");
+
+                if (args[0] is not List<object?> array)
+                    throw new Exception("First argument must be an array");
+
+                // Create a new array to avoid modifying the original
+                var sortedArray = new List<object?>(array);
+
+                // Sort the array (only works reliably for arrays of the same type)
+                sortedArray.Sort((a, b) =>
+                {
+                    if (a == null && b == null) return 0;
+                    if (a == null) return -1;
+                    if (b == null) return 1;
+
+                    if (a is double numA && b is double numB)
+                        return numA.CompareTo(numB);
+
+                    if (a is string strA && b is string strB)
+                        return strA.CompareTo(strB);
+
+                    return a.ToString().CompareTo(b.ToString());
+                });
+
+                return sortedArray;
+            }));
+
+            _globals.Define("map", new NativeFunction((args) =>
+            {
+                if (args.Count < 2)
+                    throw new Exception("map() requires at least 2 arguments: array and function");
+
+                if (args[0] == null)
+                    throw new Exception("Cannot map a null array");
+
+                if (args[0] is not List<object?> array)
+                    throw new Exception("First argument must be an array");
+
+                if (args[1] is not Function mapFunction)
+                    throw new Exception("Second argument must be a function");
+
+                var result = new List<object?>();
+
+                foreach (var item in array)
+                {
+                    var itemArgs = new List<object?> { item };
+                    result.Add(mapFunction.Call(this, itemArgs));
+                }
+
+                return result;
+            }));
+
+            _globals.Define("filter", new NativeFunction((args) =>
+            {
+                if (args.Count < 2)
+                    throw new Exception("filter() requires at least 2 arguments: array and function");
+
+                if (args[0] == null)
+                    throw new Exception("Cannot filter a null array");
+
+                if (args[0] is not List<object?> array)
+                    throw new Exception("First argument must be an array");
+
+                if (args[1] is not Function filterFunction)
+                    throw new Exception("Second argument must be a function");
+
+                var result = new List<object?>();
+
+                foreach (var item in array)
+                {
+                    var itemArgs = new List<object?> { item };
+                    var shouldInclude = filterFunction.Call(this, itemArgs);
+
+                    if (shouldInclude is bool include && include)
+                    {
+                        result.Add(item);
+                    }
+                }
+
+                return result;
+            }));
+
+            _globals.Define("find", new NativeFunction((args) =>
+            {
+                if (args.Count < 2)
+                    throw new Exception("find() requires at least 2 arguments: array and function");
+
+                if (args[0] == null)
+                    return null;
+
+                if (args[0] is not List<object?> array)
+                    throw new Exception("First argument must be an array");
+
+                if (args[1] is not Function findFunction)
+                    throw new Exception("Second argument must be a function");
+
+                foreach (var item in array)
+                {
+                    var itemArgs = new List<object?> { item };
+                    var isMatch = findFunction.Call(this, itemArgs);
+
+                    if (isMatch is bool match && match)
+                    {
+                        return item;
+                    }
+                }
+
+                return null;
+            }));
+
+            // String Manipulation
+            _globals.Define("substring", new NativeFunction((args) =>
+            {
+                if (args.Count < 2)
+                    throw new Exception("substring() requires at least 2 arguments: string and start index");
+
+                if (args[0] == null)
+                    return "";
+
+                if (args[0] is not string str)
+                    throw new Exception("First argument must be a string");
+
+                if (args[1] is not double startDouble)
+                    throw new Exception("Second argument must be a number");
+
+                int start = (int)startDouble;
+
+                if (start < 0 || start >= str.Length)
+                    throw new Exception($"Start index {start} out of bounds for string of length {str.Length}");
+
+                if (args.Count > 2)
+                {
+                    if (args[2] is not double lengthDouble)
+                        throw new Exception("Third argument must be a number");
+
+                    int length = (int)lengthDouble;
+
+                    if (length < 0)
+                        throw new Exception("Length cannot be negative");
+
+                    // Ensure we don't go past the end of the string
+                    length = Math.Min(length, str.Length - start);
+
+                    return str.Substring(start, length);
+                }
+
+                return str.Substring(start);
+            }));
+
+            _globals.Define("replace", new NativeFunction((args) =>
+            {
+                if (args.Count < 3)
+                    throw new Exception("replace() requires 3 arguments: string, old value, and new value");
+
+                if (args[0] == null)
+                    return "";
+
+                if (args[0] is not string str)
+                    throw new Exception("First argument must be a string");
+
+                string oldValue = args[1]?.ToString() ?? "";
+                string newValue = args[2]?.ToString() ?? "";
+
+                return str.Replace(oldValue, newValue);
+            }));
+
+            _globals.Define("split", new NativeFunction((args) =>
+            {
+                if (args.Count < 2)
+                    throw new Exception("split() requires at least 2 arguments: string and delimiter");
+
+                if (args[0] == null)
+                    return new List<object?>();
+
+                if (args[0] is not string str)
+                    throw new Exception("First argument must be a string");
+
+                string delimiter = args[1]?.ToString() ?? "";
+
+                if (string.IsNullOrEmpty(delimiter))
+                    throw new Exception("Delimiter cannot be empty");
+
+                string[] parts = str.Split(delimiter);
+
+                // Convert string array to List<object?>
+                var result = new List<object?>();
+                foreach (var part in parts)
+                {
+                    result.Add(part);
+                }
+
+                return result;
+            }));
+
+            _globals.Define("join", new NativeFunction((args) =>
+            {
+                if (args.Count < 2)
+                    throw new Exception("join() requires at least 2 arguments: array and delimiter");
+
+                if (args[0] == null)
+                    return "";
+
+                if (args[0] is not List<object?> array)
+                    throw new Exception("First argument must be an array");
+
+                string delimiter = args[1]?.ToString() ?? "";
+
+                // Convert each element to string and join
+                var stringParts = array.Select(item => item?.ToString() ?? "null");
+                return string.Join(delimiter, stringParts);
             }));
         }
 
@@ -243,14 +499,13 @@ namespace zds.Core
             // Initialize the loop variable
             _environment.Define(forStmt.Variable, start);
 
-            // Determine loop direction
+            // Loop direction
             bool ascending = step > 0;
 
             // Execute the loop
             while ((ascending && (double)_environment.Get(forStmt.Variable) <= end) ||
                   (!ascending && (double)_environment.Get(forStmt.Variable) >= end))
             {
-                // Execute the body
                 Execute(forStmt.Body);
 
                 // Update the loop variable
@@ -266,6 +521,7 @@ namespace zds.Core
 
             string type = value.GetType().Name;
 
+            // Format Arrays
             if (type == "List`1")
             {
                 string result = "[";
@@ -281,6 +537,7 @@ namespace zds.Core
                 return result;
             }
 
+            // Format Functions
             if (type == "Function" && value is Core.Function function)
             {
                 string result = function._declaration.Name + "(";
@@ -296,6 +553,7 @@ namespace zds.Core
                 return result;
             }
 
+            // Return other types as strings
             return value.ToString();
         }
 
