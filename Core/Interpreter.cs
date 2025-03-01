@@ -852,6 +852,7 @@ namespace zds.Core
                 AssignmentExpression assign => EvaluateAssignment(assign),
                 IndexAssignmentExpression indexAssign => indexAssign.Evaluate(),
                 PropertyExpression property => property.Evaluate(),
+                PropertyAccessExpression propertyAccess => propertyAccess.Evaluate(),
                 MethodCallExpression methodCall => methodCall.Evaluate(),
                 CallExpression call => EvaluateCall(call),
                 BinaryExpression binary => binary.Evaluate(),

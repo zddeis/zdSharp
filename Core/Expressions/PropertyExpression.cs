@@ -28,6 +28,18 @@ namespace zds.Core.Expressions
             {
                 switch (_property)
                 {
+                    case "Width":
+                        if (value is double width)
+                            window.Width = (int)width;
+                        else
+                            throw new Exception("Width property must be a number");
+                        break;
+                    case "Height":
+                        if (value is double height)
+                            window.Height = (int)height;
+                        else
+                            throw new Exception("Height property must be a number");
+                        break;
                     case "FullScreen":
                         if (value is bool fullScreen)
                             window.FullScreen = fullScreen;

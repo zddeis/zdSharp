@@ -84,6 +84,18 @@ namespace zds.Core
             }
         }
 
+        public int Width
+        {
+            get => _form.Width;
+            set => _form.Width = value;
+        }
+
+        public int Height
+        {
+            get => _form.Height;
+            set => _form.Height = value;
+        }
+
         public int MaxRefreshRate
         {
             get => _refreshRate;

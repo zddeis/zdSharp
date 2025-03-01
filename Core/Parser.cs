@@ -317,7 +317,7 @@ namespace zds.Core
                         return new PropertyExpression(expr, property, value);
                     }
 
-                    return new VariableExpression($"{name}.{property}", _environment);
+                    return new PropertyAccessExpression(expr, property);
                 }
 
                 return expr;
