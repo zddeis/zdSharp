@@ -3,10 +3,7 @@
 
 *A beginner friendly programming language*
 
-## Features
-- 🔹 **Fast and Lightweight** – Optimized for performance and minimal resource usage.
 - 🔹 **Easy-to-Learn Syntax** – A clean and readable syntax for beginners and experts alike.
-- 🔹 **Powerful Standard Library** – Built-in functions to streamline development.
 
 ## Syntax
 
