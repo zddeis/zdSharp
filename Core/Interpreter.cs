@@ -21,6 +21,21 @@ namespace zds.Core
             // Native Vars
 
             _globals.Define("pi", Math.PI);
+            _globals.Define("tau", Math.Tau);
+            _globals.Define("e", Math.E);
+            _globals.Define("phi", (1 + Math.Sqrt(5)) / 2);
+            _globals.Define("sqrt2", Math.Sqrt(2));
+            _globals.Define("sqrt3", Math.Sqrt(3));
+
+            _globals.Define("MaxValue", double.MaxValue);
+            _globals.Define("MinValue", double.MinValue);
+            _globals.Define("nan", double.NaN);
+
+            _globals.Define("True", true);
+            _globals.Define("False", false);
+
+            _globals.Define("null", null);
+            _globals.Define("nil", null);
 
             // Native Functions
 
