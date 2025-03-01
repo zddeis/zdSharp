@@ -12,6 +12,7 @@ namespace zds.Core
     public class Interpreter
     {
         private Environment _environment;
+        private static readonly Random _random = new Random();
 
         public Interpreter(Environment _globals)
         {
@@ -47,6 +48,88 @@ namespace zds.Core
             }));
 
             // Math Functions
+
+            _globals.Define("max", new NativeFunction((args) =>
+            {
+                if (args.Count < 2)
+                    throw new Exception("max() requires two number arguments");
+
+                if (args[0] is not double n1)
+                    throw new Exception("First argument must be a number");
+
+                if (args[1] is not double n2)
+                    throw new Exception("Second argument must be a number");
+
+                return Math.Max(n1, n2);
+            }));
+
+            _globals.Define("min", new NativeFunction((args) =>
+            {
+                if (args.Count < 2)
+                    throw new Exception("min() requires two number arguments");
+
+                if (args[0] is not double n1)
+                    throw new Exception("First argument must be a number");
+
+                if (args[1] is not double n2)
+                    throw new Exception("Second argument must be a number");
+
+                return Math.Min(n1, n2);
+            }));
+
+            _globals.Define("clamp", new NativeFunction((args) =>
+            {
+                if (args.Count < 3)
+                    throw new Exception("clamp() requires three number arguments: min, n, max");
+
+                if (args[0] is not double minVal)
+                    throw new Exception("First argument (min) must be a number");
+
+                if (args[1] is not double n)
+                    throw new Exception("Second argument (n) must be a number");
+
+                if (args[2] is not double maxVal)
+                    throw new Exception("Third argument (max) must be a number");
+
+                // Implement clamp logic
+                if (n < minVal) return minVal;
+                if (n > maxVal) return maxVal;
+                return n;
+            }));
+
+            _globals.Define("random", new NativeFunction((args) =>
+            {
+                if (args.Count < 2)
+                    throw new Exception("random() requires at least 2 arguments: min and max");
+
+                if (args[0] is not double minVal)
+                    throw new Exception("First argument (min) must be a number");
+
+                if (args[1] is not double maxVal)
+                    throw new Exception("Second argument (max) must be a number");
+
+                if (minVal > maxVal)
+                    throw new Exception("Min value cannot be greater than max value");
+
+                // Check if decimals parameter is provided
+                if (args.Count > 2)
+                {
+                    if (args[2] is not double decimalPlaces)
+                        throw new Exception("Third argument (decimals) must be a number");
+
+                    int decimals = (int)decimalPlaces;
+                    if (decimals < 0)
+                        throw new Exception("Decimal places cannot be negative");
+
+                    // Generate random with specified decimal places
+                    double randomValue = minVal + (_random.NextDouble() * (maxVal - minVal));
+                    return Math.Round(randomValue, decimals);
+                }
+
+                // Integer random (no decimals)
+                return (double)_random.Next((int)minVal, (int)maxVal + 1);
+            }));
+
             _globals.Define("round", new NativeFunction((args) =>
             {
                 if (args.Count == 0) return 0;
@@ -65,7 +148,6 @@ namespace zds.Core
                 return Math.Abs(Convert.ToDecimal(args[0]));
             }));
 
-            // New Math Functions
             _globals.Define("sin", new NativeFunction((args) =>
             {
                 if (args.Count == 0) return 0;
