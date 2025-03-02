@@ -291,6 +291,16 @@ namespace zds.Core
                 return (double)_random.Next((int)minVal, (int)maxVal + 1);
             }));
 
+            _globals.Define("wait", new NativeFunction((args) =>
+            {
+                if (args.Count == 0)
+                    throw new Exception("wait() requires a time in seconds");
+                if (args[0] is not double waitTime)
+                    throw new Exception("First argument must be a number (time in seconds)");
+                Thread.Sleep((int)(Math.Max(waitTime, 0) * 1000));
+                return null;
+            }));
+
             _globals.Define("round", new NativeFunction((args) =>
             {
                 if (args.Count == 0) return 0;

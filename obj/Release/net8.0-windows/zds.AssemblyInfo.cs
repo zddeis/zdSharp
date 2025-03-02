@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("zds")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a43028d653b1afbc96933ad509a4f985451ddffb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d109d94c8e5b0339c5ba148cd7f07a4dface427a")]
 [assembly: System.Reflection.AssemblyProductAttribute("zds")]
 [assembly: System.Reflection.AssemblyTitleAttribute("zds")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
