@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using zds.Core.Exceptions;
+
 namespace zds.Core.Expressions
 {
     public class MethodCallExpression : IExpression

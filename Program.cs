@@ -11,7 +11,7 @@ namespace zds
     {
         public static bool Debug = false;
         public static string Version = "v0.1";
-        public static Interpreter CurrentInterpreter { get; private set; }
+        public static Interpreter? CurrentInterpreter { get; private set; }
 
         [STAThread]
         static void Main(string[] args)

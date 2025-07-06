@@ -31,5 +31,12 @@ namespace zds.Core
         {
             _values[name] = value;
         }
+        public void Define(string[] names, object? value)
+        {
+            foreach (var name in names)
+            {
+                _values[name] = value;
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
+using zds.Core.Exceptions;
 using zds.Core.Expressions;
 using zds.Core.Statements;
 

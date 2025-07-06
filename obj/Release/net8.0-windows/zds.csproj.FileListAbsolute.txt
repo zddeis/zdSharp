@@ -7,9 +7,9 @@ C:\Users\david\Desktop\Visual Studio Projects\GitHub\zds\obj\Release\net8.0-wind
 C:\Users\david\Desktop\Visual Studio Projects\GitHub\zds\obj\Release\net8.0-windows\zds.AssemblyInfoInputs.cache
 C:\Users\david\Desktop\Visual Studio Projects\GitHub\zds\obj\Release\net8.0-windows\zds.AssemblyInfo.cs
 C:\Users\david\Desktop\Visual Studio Projects\GitHub\zds\obj\Release\net8.0-windows\zds.csproj.CoreCompileInputs.cache
+C:\Users\david\Desktop\Visual Studio Projects\GitHub\zds\obj\Release\net8.0-windows\zds.sourcelink.json
 C:\Users\david\Desktop\Visual Studio Projects\GitHub\zds\obj\Release\net8.0-windows\zds.dll
 C:\Users\david\Desktop\Visual Studio Projects\GitHub\zds\obj\Release\net8.0-windows\refint\zds.dll
 C:\Users\david\Desktop\Visual Studio Projects\GitHub\zds\obj\Release\net8.0-windows\zds.pdb
 C:\Users\david\Desktop\Visual Studio Projects\GitHub\zds\obj\Release\net8.0-windows\zds.genruntimeconfig.cache
 C:\Users\david\Desktop\Visual Studio Projects\GitHub\zds\obj\Release\net8.0-windows\ref\zds.dll
-C:\Users\david\Desktop\Visual Studio Projects\GitHub\zds\obj\Release\net8.0-windows\zds.sourcelink.json

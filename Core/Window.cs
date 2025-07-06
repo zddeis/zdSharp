@@ -31,10 +31,10 @@ namespace zds.Core
             _form.KeyUp += Form_KeyUp;
         }
 
-        private void Form_KeyDown(object sender, KeyEventArgs e)
+        private void Form_KeyDown(object? sender, KeyEventArgs? e)
         {
             string keyName = e.KeyCode.ToString();
-            if (_keyDownHandlers.TryGetValue(keyName, out Function handler))
+            if (_keyDownHandlers.TryGetValue(keyName, out Function? handler))
             {
                 try
                 {
@@ -48,10 +48,10 @@ namespace zds.Core
             }
         }
 
-        private void Form_KeyUp(object sender, KeyEventArgs e)
+        private void Form_KeyUp(object? sender, KeyEventArgs? e)
         {
             string keyName = e.KeyCode.ToString();
-            if (_keyUpHandlers.TryGetValue(keyName, out Function handler))
+            if (_keyUpHandlers.TryGetValue(keyName, out Function? handler))
             {
                 try
                 {
