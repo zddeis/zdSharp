@@ -117,21 +117,49 @@ namespace zds.Core
         {
             var statements = new List<IStatement>();
 
-            while (!IsAtEnd())
-                statements.Add(Statement());
+            try
+            {
+                while (!IsAtEnd())
+                    statements.Add(Statement());
+            }
+            catch (ParseException ex)
+            {
+                // Re-throw with line information already included
+                throw;
+            }
+            catch (Exception ex)
+            {
+                // For unexpected exceptions, include current line
+                int currentLine = IsAtEnd() ? (_tokens.Count > 0 ? _tokens[_tokens.Count - 1].Line : 1) : Peek().Line;
+                throw new ParseException($"Unexpected error: {ex.Message}", currentLine);
+            }
 
             return statements;
         }
 
         private IStatement Statement()
         {
-            if (Match(TokenType.Function)) return FunctionDeclaration();
-            if (Match(TokenType.While)) return WhileStatement();
-            if (Match(TokenType.If)) return IfStatement();
-            if (Match(TokenType.Return)) return ReturnStatement();
-            if (Match(TokenType.For)) return ForStatement();
+            try
+            {
+                if (Match(TokenType.Function)) return FunctionDeclaration();
+                if (Match(TokenType.While)) return WhileStatement();
+                if (Match(TokenType.If)) return IfStatement();
+                if (Match(TokenType.Return)) return ReturnStatement();
+                if (Match(TokenType.For)) return ForStatement();
 
-            return new ExpressionStatement(Expression());
+                return new ExpressionStatement(Expression());
+            }
+            catch (ParseException)
+            {
+                // Re-throw parse exceptions as-is (they already have line info)
+                throw;
+            }
+            catch (Exception ex)
+            {
+                // For other exceptions, add line information
+                int currentLine = IsAtEnd() ? (_tokens.Count > 0 ? _tokens[_tokens.Count - 1].Line : 1) : Peek().Line;
+                throw new ParseException($"Error in statement: {ex.Message}", currentLine);
+            }
         }
 
         private IExpression Expression()
@@ -350,7 +378,7 @@ namespace zds.Core
                 return expr;
             }
 
-            throw new ParseException($"Unexpected token: {Peek()}", line);
+            throw new ParseException($"Unexpected token: {Peek().Type} '{Peek().Value}'", line);
         }
 
         private bool Match(TokenType type)
@@ -393,7 +421,15 @@ namespace zds.Core
         private Token Consume(TokenType type, string message)
         {
             if (Check(type)) return Advance();
-            throw new ParseException(message, Peek().Line);
+
+            // Get the current line for error reporting
+            int currentLine = IsAtEnd() ? (_tokens.Count > 0 ? _tokens[_tokens.Count - 1].Line : 1) : Peek().Line;
+
+            // Include information about what was found vs what was expected
+            string found = IsAtEnd() ? "end of file" : $"'{Peek().Value}' ({Peek().Type})";
+            string fullMessage = $"{message}. Found {found}";
+
+            throw new ParseException(fullMessage, currentLine);
         }
     }
 }

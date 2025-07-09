@@ -1,11 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace zds.Core
 {
+    // Windows API imports for console manipulation
+    public static class ConsoleHelper
+    {
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
+
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        const int SW_HIDE = 0;
+        const int SW_SHOW = 5;
+
+        public static void HideConsole()
+        {
+            var handle = GetConsoleWindow();
+            ShowWindow(handle, SW_HIDE);
+        }
+
+        public static void ShowConsole()
+        {
+            var handle = GetConsoleWindow();
+            ShowWindow(handle, SW_SHOW);
+        }
+    }
+
     public class NativeFunction
     {
         private readonly Func<List<object?>, object?> _function;
@@ -47,6 +73,18 @@ namespace zds.Core
             _environment.Define("nil", null);
 
             // Native Functions
+
+            _environment.Define("hideConsole", new NativeFunction((args) =>
+            {
+                ConsoleHelper.HideConsole();
+                return null;
+            }));
+
+            _environment.Define("showConsole", new NativeFunction((args) =>
+            {
+                ConsoleHelper.ShowConsole();
+                return null;
+            }));
 
             _environment.Define("waitKey", new NativeFunction((args) =>
             {
