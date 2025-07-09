@@ -351,19 +351,19 @@ namespace zds.Core
             _environment.Define("round", new NativeFunction((args) =>
             {
                 if (args.Count == 0) return 0;
-                return Math.Round(Convert.ToDecimal(args[0]));
+                return Math.Round((double)Convert.ToDecimal(args[0]));
             }));
 
             _environment.Define("floor", new NativeFunction((args) =>
             {
                 if (args.Count == 0) return 0;
-                return Math.Floor(Convert.ToDecimal(args[0]));
+                return Math.Floor((double)Convert.ToDecimal(args[0]));
             }));
 
             _environment.Define("abs", new NativeFunction((args) =>
             {
                 if (args.Count == 0) return 0;
-                return Math.Abs(Convert.ToDecimal(args[0]));
+                return Math.Abs((double)Convert.ToDecimal(args[0]));
             }));
 
             _environment.Define("sin", new NativeFunction((args) =>
