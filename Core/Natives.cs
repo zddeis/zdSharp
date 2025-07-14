@@ -706,6 +706,43 @@ namespace zds.Core
                 return string.Join(delimiter, stringParts);
             }));
 
+            _environment.Define("toNumber", new NativeFunction((args) =>
+            {
+                if (args.Count == 0)
+                    return 0.0;
+
+                var value = args[0];
+
+                if (value == null)
+                    return 0.0;
+
+                if (value is double d)
+                    return d;
+
+                if (value is bool b)
+                    return b ? 1.0 : 0.0;
+
+                if (value is string str)
+                {
+                    if (string.IsNullOrWhiteSpace(str))
+                        return 0.0;
+
+                    if (double.TryParse(str.Trim(), out double result))
+                        return result;
+
+                    // If string can't be parsed as number, return NaN
+                    return null;
+                }
+
+                // For other types, try to convert to string first, then to number
+                string stringValue = value.ToString() ?? "";
+                if (double.TryParse(stringValue, out double parsed))
+                    return parsed;
+
+                return null;
+            }));
+
+
             return _environment;
         }
 

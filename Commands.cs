@@ -10,24 +10,18 @@ namespace zds
     class Commands
     {
         private static string Extension = "zds";
-        private static string Docs = "docs.html";
+        private static string Docs = "https://zddeis.github.io/zdSharp_docs/";
 
         private static string help = "" +
                         "\n 1. Write program file path or open it with ZD#" +
                         "\n " +
                         "\n 2. Other commands:" +
                         "\n " +
-                        "\n  credits - Credits to who help develop ZD#" +
                         "\n  help    - List of commands               " +
                         "\n  quit    - Close this window              " +
                         "\n  q       - Close this window              " +
                         "\n  clear   - Clear this window              " +
                         "\n  docs    - Opens ZD# documentation        ";
-
-        private static string credits = "" +
-                        "\n Credits:" +
-                        "\n " +
-                        "";
 
         public static bool VerifyExtension(string FilePath)
         {
@@ -54,16 +48,12 @@ namespace zds
 
             switch (Command)
             {
-                case "credits":
-
-                    Console.WriteLine(credits);
-                    break;
-
                 case "help":
 
                     Console.WriteLine(help);
                     break;
 
+                case "exit":
                 case "quit":
                 case "q":
 
@@ -76,13 +66,12 @@ namespace zds
                     break;
 
                 case "docs":
-                    if (!File.Exists(Docs))
-                    {
-                        //Log.Error($"{Docs} doesn't exist");
-                        break;
-                    }
 
-                    Process.Start(Docs);
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = Docs,
+                        UseShellExecute = true // Required to open URLs in the default browser
+                    });
                     break;
 
                 default:
