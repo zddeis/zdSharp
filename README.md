@@ -8,6 +8,7 @@
 2. Download the following files:
    - `zds.exe` (the ZD# interpreter)
    - `zds.dll` (required library for the interpreter)
+   - `zds.runtimeconfig.json` (runtime configuration file)
    - `zds-extension.vsix` (Visual Studio Code syntax highlighting extension)
 
 ### Step 2: Install Visual Studio Code Extension
@@ -19,7 +20,7 @@
 
 ### Step 3: Set Up Your ZD# Development Folder
 1. Create a new folder on your computer (e.g., "ZDSharp-Projects" on your Desktop)
-2. Drag both the downloaded `zds.exe` and `zds.dll` files into this folder
+2. Drag the downloaded `zds.exe`, `zds.dll`, and `zds.runtimeconfig.json` files into this folder
 3. This folder will be your workspace where you'll write all your ZD# programs
 
 ### Step 4: Write Your First Program
