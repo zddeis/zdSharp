@@ -1,6 +1,46 @@
 # ZD# Programming Language
 ![ZD# Logo](https://zddeis.github.io/portfolio/img/work/zdsharp.png)
 
+## Installation
+
+### Step 1: Download Required Files
+1. Go to [https://github.com/zddeis/zdSharp/releases](https://github.com/zddeis/zdSharp/releases)
+2. Download the following files:
+   - `zds.exe` (the ZD# interpreter)
+   - `zds.dll` (required library for the interpreter)
+   - `zds-extension.vsix` (Visual Studio Code syntax highlighting extension)
+
+### Step 2: Install Visual Studio Code Extension
+1. Open Visual Studio Code
+2. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac) to open the Command Palette
+3. Type "`Extensions: Install from VSIX...`" and select it
+4. Navigate to where you downloaded `zds-extension.vsix` and select it
+5. Once the message "Completed installing extension." is prompted. You are ready for the next step
+
+### Step 3: Set Up Your ZD# Development Folder
+1. Create a new folder on your computer (e.g., "ZDSharp-Projects" on your Desktop)
+2. Drag both the downloaded `zds.exe` and `zds.dll` files into this folder
+3. This folder will be your workspace where you'll write all your ZD# programs
+
+### Step 4: Write Your First Program
+1. In your ZD# development folder, create a new file called `hello.zds`
+2. Open the file in Visual Studio Code
+3. Write your first ZD# program:
+```
+print("Hello World")
+```
+4. Save the file
+
+### Step 5: Run Your Program
+1. Open a terminal/command prompt
+2. Navigate to your ZD# development folder using `cd` command
+3. Run your program with:
+```
+zds.exe hello.zds
+```
+
+**Note:** Each ZD# program should be contained in a single `.zds` file.
+
 *A beginner friendly programming language*
 
 - 🔹 **Easy-to-Learn Syntax** – A clean and readable syntax for beginners and experts alike.
